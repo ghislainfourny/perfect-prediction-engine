@@ -5,9 +5,9 @@ Prerequisite: Java 11 (will not work with 8)
 
 Building:
 
-mvn clean compile
+    mvn clean compile
 
 Running:
 
-mvn javafx:run
+    mvn javafx:run
 

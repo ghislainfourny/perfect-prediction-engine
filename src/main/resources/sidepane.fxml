@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" minWidth="300.0" prefWidth="300.0" vbarPolicy="NEVER" HBox.hgrow="NEVER"
+            xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ch.ethz.gametheory.gamecreator.controllers.SidePaneController">
+    <VBox fx:id="VBoxSidepane" spacing="10.0">
+        <padding>
+            <Insets left="5.0" right="5.0" top="10.0" />
+        </padding>
+        <TitledPane fx:id="TPPlayers" contentDisplay="RIGHT">
+            <AnchorPane minHeight="-Infinity">
+                <ListView fx:id="ListViewPlayers" focusTraversable="false" prefHeight="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            </AnchorPane>
+        </TitledPane>
+        <TitledPane fx:id="TPInformationsets" contentDisplay="RIGHT">
+            <AnchorPane>
+                <ListView fx:id="ListViewInformationsets" focusTraversable="false" prefHeight="0.0"
+                          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                          AnchorPane.topAnchor="0.0"/>
+            </AnchorPane>
+        </TitledPane>
+        <TitledPane fx:id="TPNodes" contentDisplay="RIGHT">
+            <graphic>
+                <AnchorPane/>
+            </graphic>
+            <AnchorPane fx:id="AnchorPaneNodes"/>
+        </TitledPane>
+        <TitledPane fx:id="TPOutcomes" contentDisplay="RIGHT">
+            <graphic>
+                <AnchorPane/>
+            </graphic>
+            <AnchorPane fx:id="AnchorPaneOutcomes"/>
+        </TitledPane>
+    </VBox>
+</ScrollPane>

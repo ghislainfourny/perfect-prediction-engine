@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<VBox id="Root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500" prefWidth="800" stylesheets="@material-fx-v0_3.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ethz.gametheory.gamecreator.controllers.MainController">
+  <fx:include fx:id="menu" source="menu.fxml" />
+  <TabPane fx:id="mainTabPane" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+    <Tab closable="false" text="Game Tree">
+      <HBox VBox.vgrow="ALWAYS">
+        <fx:include fx:id="sidePane" source="sidepane.fxml" />
+        <fx:include fx:id="forest" source="forest.fxml" HBox.hgrow="ALWAYS" />
+      </HBox>
+    </Tab>
+    <Tab closable="false" text="Minkowski spacetime"/>
+  </TabPane>
+  <HBox alignment="CENTER_RIGHT" VBox.vgrow="NEVER">
+    <Label id="label-dark-background" ellipsisString="" text="-" wrapText="true" />
+    <Slider fx:id="sliderZoom" blockIncrement="0.1" focusTraversable="false" majorTickUnit="0.5" max="2.0" min="0.2" minorTickCount="5" snapToTicks="true" value="1.0" />
+    <Label id="label-dark-background" ellipsisString="" text="+" />
+    <Label id="label-dark-background" fx:id="lblZoom" contentDisplay="TOP" ellipsisString="" minWidth="55.0" text="100%" wrapText="true" HBox.hgrow="NEVER">
+      <HBox.margin>
+        <Insets left="15.0" right="10.0" />
+      </HBox.margin>
+    </Label>
+  </HBox>
+</VBox>

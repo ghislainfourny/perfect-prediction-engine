@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+      fx:id="vboxForest"
+      fx:controller="ch.ethz.gametheory.gamecreator.controllers.ForestController">
+    <HBox spacing="10.0">
+        <opaqueInsets>
+            <Insets/>
+        </opaqueInsets>
+        <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </padding>
+        <Button fx:id="ButtonRotateL" mnemonicParsing="false" onAction="#rotateLeft">
+            <tooltip>
+                <Tooltip text="Rotate Clockwise"/>
+            </tooltip>
+        </Button>
+        <Button fx:id="ButtonRotateR" mnemonicParsing="false" onAction="#rotateRight">
+            <tooltip>
+                <Tooltip text="Rotate Anticlockwise"/>
+            </tooltip>
+        </Button>
+        <Separator orientation="VERTICAL"/>
+        <ToggleButton fx:id="ToggleConnecting" mnemonicParsing="false" onAction="#toggleConnecting"
+                      text=" Connect Nodes">
+            <tooltip>
+                <Tooltip text="Connect Nodes"/>
+            </tooltip>
+        </ToggleButton>
+        <ToggleButton fx:id="ToggleMove" mnemonicParsing="false" onAction="#toggleMove" text=" Swap Subtrees">
+            <tooltip>
+                <Tooltip text="Swap Nodes"/>
+            </tooltip>
+        </ToggleButton>
+        <Separator orientation="VERTICAL"/>
+        <CheckBox fx:id="ShowPlayersCheckBox" mnemonicParsing="false" selected="true" text="Show Players"/>
+        <CheckBox fx:id="ShowOutcomesCheckBox" mnemonicParsing="false" selected="true" text="Show Outcomes"/>
+        <Separator orientation="VERTICAL"/>
+        <Button fx:id="btnCheckConstraints" mnemonicParsing="false" onAction="#checkConstraints"
+                text="Check Constraints"/>
+        <Button fx:id="btnSolve" mnemonicParsing="false" onAction="#solve" text="Solve"/>
+    </HBox>
+    <StackPane fx:id="stackPane" alignment="TOP_LEFT" VBox.vgrow="ALWAYS">
+        <ScrollPane fitToHeight="true" fitToWidth="true">
+            <VBox alignment="TOP_CENTER">
+                <VBox fx:id="vboxNotifications"/>
+              <HBox fx:id="MainTreePane" alignment="TOP_CENTER" minHeight="150.0" VBox.vgrow="SOMETIMES"/>
+                <Label text="Main Tree"/>
+                <HBox fx:id="BoxUnassignedNodes" alignment="TOP_CENTER" VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </ScrollPane>
+        <Pane fx:id="topPane" mouseTransparent="true"/>
+    </StackPane>
+</VBox>

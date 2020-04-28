@@ -1,4 +1,4 @@
-# perfect-prediction-engine
+# Perfect Prediction Engine
 First implementation of the Perfect Prediction Engine
 
 Prerequisite: Maven and Java 11 (will not work with 8)

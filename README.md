@@ -11,3 +11,4 @@ Running:
 
     mvn javafx:run
 
+Copyright Ramon Gomm, Ghislain Fourny, Gustavo Alonso, 2019-2020. All rights reserved.

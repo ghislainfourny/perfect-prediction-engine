@@ -1,6 +1,8 @@
 package ch.ethz.gametheory.gamecreator;
 
-import ch.ethz.gametheory.gamecreator.controllers.*;
+import ch.ethz.gametheory.gamecreator.controllers.ForestController;
+import ch.ethz.gametheory.gamecreator.data.DataModel;
+import ch.ethz.gametheory.gamecreator.data.Player;
 import javafx.beans.property.*;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -28,14 +30,17 @@ public class Outcome extends TreeNode {
     private DoubleProperty centerYProperty;
     private ObservableList<Player> playerList;
 
-    public Outcome(DoubleProperty scale){
-        this(new Rectangle(), new Label(), scale);
+    public Outcome(DataModel dataModel) {
+        this(new Rectangle(), new Label(), dataModel);
     }
 
-    private Outcome(Rectangle rectangle, Label playerOutcomes, DoubleProperty scale){
-        super(rectangle,playerOutcomes);
-        this.playerList = SidePaneController.getPlayerList();
-        this.playerList.addListener((ListChangeListener<? super Player>) change -> {if (playerOutcomes.isVisible())setOutcomesText();});
+    private Outcome(Rectangle rectangle, Label playerOutcomes, DataModel dataModel) {
+        super(rectangle, playerOutcomes);
+        setEvents(dataModel);
+        this.playerList = dataModel.getPlayers();
+        this.playerList.addListener((ListChangeListener<? super Player>) change -> {
+            if (playerOutcomes.isVisible()) setOutcomesText();
+        });
         this.outcomeNumbers = new HashMap<>();
         this.centerXProperty = new SimpleDoubleProperty();
         this.centerYProperty = new SimpleDoubleProperty();
@@ -53,32 +58,33 @@ public class Outcome extends TreeNode {
 
         this.playerOutcomes = playerOutcomes;
         this.playerOutcomes.getStyleClass().remove("label");
-        this.playerOutcomes.minWidthProperty().bind(scale.multiply(OUTCOME_WIDTH));
-        this.playerOutcomes.minHeightProperty().bind(scale.multiply(OUTCOME_HEIGHT));
+        this.playerOutcomes.minWidthProperty().bind(dataModel.scaleProperty().multiply(OUTCOME_WIDTH));
+        this.playerOutcomes.minHeightProperty().bind(dataModel.scaleProperty().multiply(OUTCOME_HEIGHT));
         this.playerOutcomes.setAlignment(Pos.CENTER);
         this.playerOutcomes.visibleProperty().bind(ForestController.showOutcomesProperty());
         this.playerOutcomes.visibleProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (observableValue.getValue()){
+            if (observableValue.getValue()) {
                 setOutcomesText();
             } else {
                 playerOutcomes.setText("");
                 setMinWidth(false);
-            }});
+            }
+        });
         if (playerOutcomes.isVisible()) setOutcomesText();
 
         this.solutionProperty().addListener((observableValue, aBoolean, t1) -> {
-            this.normalColor = observableValue.getValue()?Color.GOLD:Color.BLACK;
+            this.normalColor = observableValue.getValue() ? Color.GOLD : Color.BLACK;
             setSelected(false);
         });
     }
 
     private void setOutcomesText() {
-        if (!this.playerList.isEmpty()){
+        if (!this.playerList.isEmpty()) {
             StringBuilder s = new StringBuilder();
-            for (Player p : playerList){
+            for (Player p : playerList) {
                 s.append(getPlayerOutcome(p)).append(", ");
             }
-            s.setLength(s.length()-2);
+            s.setLength(s.length() - 2);
             playerOutcomes.setText(s.toString());
             setMinWidth(true);
         } else {
@@ -87,31 +93,32 @@ public class Outcome extends TreeNode {
         }
     }
 
-    private IntegerProperty getPlayerOutcomeProperty(Player player){
+    private IntegerProperty getPlayerOutcomeProperty(Player player) {
         if (!outcomeNumbers.containsKey(player)) {
             IntegerProperty t = new SimpleIntegerProperty(0);
             t.addListener(((observableValue, number, t1) -> {
-                if(playerOutcomes.isVisible())setOutcomesText();
-                toggleChanged();}));
+                if (playerOutcomes.isVisible()) setOutcomesText();
+                toggleChanged();
+            }));
             toggleChanged();
             outcomeNumbers.put(player, t);
         }
         return outcomeNumbers.get(player);
     }
 
-    public int getPlayerOutcome(Player player){
+    public int getPlayerOutcome(Player player) {
         return getPlayerOutcomeProperty(player).get();
     }
 
-    public void setPlayerOutcome(Player player, int value){
+    public void setPlayerOutcome(Player player, int value) {
         getPlayerOutcomeProperty(player).setValue(value);
     }
 
-    public double getCenterX(){
+    public double getCenterX() {
         return centerXProperty.getValue();
     }
 
-    public double getCenterY(){
+    public double getCenterY() {
         return centerYProperty.getValue();
     }
 
@@ -123,12 +130,12 @@ public class Outcome extends TreeNode {
         return this.rectangle.getWidth();
     }
 
-    private void setMinWidth(boolean isShown){
-        if (isShown){
+    private void setMinWidth(boolean isShown) {
+        if (isShown) {
             Text t = new Text(playerOutcomes.getText());
             t.setFont(playerOutcomes.getFont());
             double INSET = 5.0;
-            double width = t.getBoundsInLocal().getWidth() + 2* INSET;
+            double width = t.getBoundsInLocal().getWidth() + 2 * INSET;
             playerOutcomes.setPrefWidth(Double.max(this.minWidth, width));
         } else {
             playerOutcomes.setPrefWidth(this.minWidth);
@@ -147,11 +154,24 @@ public class Outcome extends TreeNode {
 
     @Override
     public void setSelected(boolean value) {
-        this.rectangle.setStroke(value?selectedColor:normalColor);
+        this.rectangle.setStroke(value ? selectedColor : normalColor);
     }
 
     @Override
     public BooleanProperty deletedProperty() {
         return null;
     }
+
+    private void setEvents(DataModel dataModel) {
+        // Selecting
+        this.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.isControlDown()) {
+                dataModel.toggleSelectedNode(this);
+            } else {
+                dataModel.setSelectedNode(this);
+            }
+            mouseEvent.consume();
+        });
+    }
+
 }

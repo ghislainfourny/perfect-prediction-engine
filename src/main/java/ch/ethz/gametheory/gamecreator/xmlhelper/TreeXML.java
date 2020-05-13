@@ -4,6 +4,7 @@ import ch.ethz.gametheory.gamecreator.ChoiceNode;
 import ch.ethz.gametheory.gamecreator.Outcome;
 import ch.ethz.gametheory.gamecreator.Tree;
 import ch.ethz.gametheory.gamecreator.TreeNode;
+import ch.ethz.gametheory.gamecreator.data.DataModel;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class TreeXML {
     public List<ChoiceNodeXML> choiceNodes;
     public List<OutcomeXML> outcomes;
 
-    public static TreeXML convert(Tree tree, Map<TreeNode, Integer> uniqueIdentifier, AtomicInteger counter){
+    public static TreeXML convert(Tree tree, Map<TreeNode, Integer> uniqueIdentifier, AtomicInteger counter, DataModel dataModel) {
         if (tree == null) {
             return null;
         }
@@ -30,7 +31,7 @@ public class TreeXML {
                 ChoiceNodeXML choiceNodeXML = ChoiceNodeXML.convert((ChoiceNode) node, uniqueIdentifier, counter);
                 treeXML.choiceNodes.add(choiceNodeXML);
             } else if (node instanceof Outcome) {
-                OutcomeXML o = OutcomeXML.convert((Outcome) node,uniqueIdentifier,counter);
+                OutcomeXML o = OutcomeXML.convert((Outcome) node, uniqueIdentifier, counter, dataModel);
                 treeXML.outcomes.add(o);
             }
         });

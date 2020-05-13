@@ -1,8 +1,12 @@
 package ch.ethz.gametheory.gamecreator;
 
-import ch.ethz.gametheory.gamecreator.xmlhelper.*;
+import ch.ethz.gametheory.gamecreator.xmlhelper.InformationSetXML;
+import ch.ethz.gametheory.gamecreator.xmlhelper.PlayerXML;
+import ch.ethz.gametheory.gamecreator.xmlhelper.TreeXML;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlRootElement(name = "gamedata")
@@ -18,6 +22,7 @@ public class GameDataWrapper {
     public List<PlayerXML> getPlayers() {
         return players;
     }
+
     public void setPlayers(List<PlayerXML> players) {
         this.players = players;
     }
@@ -27,6 +32,7 @@ public class GameDataWrapper {
     public List<InformationSetXML> getInformationSets() {
         return informationSets;
     }
+
     public void setInformationSets(List<InformationSetXML> informationSets) {
         this.informationSets = informationSets;
     }
@@ -35,6 +41,7 @@ public class GameDataWrapper {
     public TreeXML getMainTree() {
         return mainTree;
     }
+
     public void setMainTree(TreeXML mainTree) {
         this.mainTree = mainTree;
     }
@@ -44,6 +51,7 @@ public class GameDataWrapper {
     public List<TreeXML> getComponents() {
         return components;
     }
+
     public void setComponents(List<TreeXML> components) {
         this.components = components;
     }

@@ -1,6 +1,6 @@
 package ch.ethz.gametheory.gamecreator.xmlhelper;
 
-import ch.ethz.gametheory.gamecreator.Player;
+import ch.ethz.gametheory.gamecreator.data.Player;
 
 public class PlayerXML {
     public int ID;

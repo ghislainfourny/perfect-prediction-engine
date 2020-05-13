@@ -1,4 +1,4 @@
-package ch.ethz.gametheory.gamecreator;
+package ch.ethz.gametheory.gamecreator.data;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -11,9 +11,10 @@ import javafx.scene.paint.Paint;
 import java.util.Random;
 
 public class InformationSet {
+
     private ObjectProperty<Paint> color;
     private ObjectProperty<Player> assignedPlayer;
-    private BooleanProperty isDeleted;
+    private BooleanProperty deleted;
     private ChangeListener<Boolean> isDeletedListener;
     private final int id;
 
@@ -21,8 +22,8 @@ public class InformationSet {
         this.id = id;
         assignedPlayer = new SimpleObjectProperty<>(null);
         Random rand = new Random();
-        color = new SimpleObjectProperty<>(Color.rgb(rand.nextInt(256), rand.nextInt(256),rand.nextInt(256)));
-        isDeleted = new SimpleBooleanProperty(false);
+        color = new SimpleObjectProperty<>(Color.rgb(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)));
+        deleted = new SimpleBooleanProperty(false);
         isDeletedListener = (observableValue, aBoolean, t1) -> setAssignedPlayer(null);
     }
 
@@ -39,14 +40,14 @@ public class InformationSet {
     }
 
     public void setAssignedPlayer(Player assignedPlayer) {
-        if (assignedPlayer!=this.assignedPlayer.getValue()) {
+        if (assignedPlayer != this.assignedPlayer.getValue()) {
             if (assignedPlayer != this.assignedPlayer.getValue() && this.getAssignedPlayer() != null) {
-                this.getAssignedPlayer().isDeletedProperty().removeListener(isDeletedListener);
+                this.getAssignedPlayer().deletedProperty().removeListener(isDeletedListener);
             }
             this.assignedPlayer.setValue(assignedPlayer);
 
             if (this.assignedPlayer.getValue() != null) {
-                this.getAssignedPlayer().isDeletedProperty().addListener(isDeletedListener);
+                this.getAssignedPlayer().deletedProperty().addListener(isDeletedListener);
             }
         }
     }
@@ -59,23 +60,23 @@ public class InformationSet {
         return color.get();
     }
 
-    ObjectProperty<Paint> getColorProperty(){
+    public ObjectProperty<Paint> getColorProperty() {
         return color;
     }
 
-    BooleanProperty isDeletedProperty(){
-        return isDeleted;
+    public BooleanProperty deletedProperty() {
+        return deleted;
     }
 
     public void setDeleted() {
-        this.isDeleted.set(true);
+        this.deleted.set(true);
     }
 
     @Override
     public String toString() {
-        return "Informationset " + id
-                + (assignedPlayer.getValue()==null?"":"; " +
-                (assignedPlayer.getValue().getName().isEmpty()?"Player " + assignedPlayer.getValue().getId():assignedPlayer.getValue().getName()));
+        return "Information Set " + id
+                + (assignedPlayer.getValue() == null ? "" : "; " +
+                (assignedPlayer.getValue().getName().isEmpty() ? "Player " + assignedPlayer.getValue().getId() : assignedPlayer.getValue().getName()));
     }
 
 

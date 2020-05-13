@@ -39,7 +39,7 @@ public class GUI extends Application {
         primaryStage.show();
     }
 
-    public void loadFile(File file){
+    public void loadFile(File file) {
         mainController.loadFile(file);
     }
 

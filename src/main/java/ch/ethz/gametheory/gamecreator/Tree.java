@@ -1,5 +1,6 @@
 package ch.ethz.gametheory.gamecreator;
 
+import ch.ethz.gametheory.gamecreator.data.Player;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -16,11 +17,11 @@ public class Tree {
     private InvalidationListener nodeListener;
     private InvalidationListener outcomeListener;
 
-    Tree(TreeNode root){
+    public Tree(TreeNode root) {
         this(root, new HashSet<>(Collections.singletonList(root)));
     }
 
-    Tree(TreeNode root, Set<TreeNode> nodes){
+    Tree(TreeNode root, Set<TreeNode> nodes) {
         this.root = root;
         this.nodes = nodes;
         this.integrityChange = new SimpleBooleanProperty();
@@ -42,15 +43,15 @@ public class Tree {
         return nodes;
     }
 
-    BooleanProperty integrityChangeProperty(){
+    BooleanProperty integrityChangeProperty() {
         return this.integrityChange;
     }
 
-    private void toggleIntegrityChange(){
+    private void toggleIntegrityChange() {
         this.integrityChange.set(!this.integrityChange.get());
     }
 
-    private void cleanupNodes(Set<TreeNode> subgraph){
+    private void cleanupNodes(Set<TreeNode> subgraph) {
         subgraph.forEach((node -> {
             node.setTree(null);
             if (node instanceof ChoiceNode)
@@ -60,7 +61,7 @@ public class Tree {
         }));
     }
 
-    private void initializeNodes(Set<TreeNode> subgraph){
+    private void initializeNodes(Set<TreeNode> subgraph) {
         subgraph.forEach((node -> {
             node.setTree(this);
             if (node instanceof ChoiceNode)
@@ -70,10 +71,10 @@ public class Tree {
         }));
     }
 
-    public void printGraph(Set<TreeNode> graph){
-        for (TreeNode n: graph) {
-            System.out.print("Node: " + n );
-            if (n instanceof ChoiceNode){
+    public void printGraph(Set<TreeNode> graph) {
+        for (TreeNode n : graph) {
+            System.out.print("Node: " + n);
+            if (n instanceof ChoiceNode) {
                 System.out.println(((ChoiceNode) n).getGraphChildren());
             } else {
                 System.out.println();
@@ -86,7 +87,7 @@ public class Tree {
         Set<TreeNode> subgraph = new HashSet<>();
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(node);
-        while (!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             TreeNode n = queue.poll();
             subgraph.add(n);
             nodes.remove(n);
@@ -97,7 +98,8 @@ public class Tree {
 
         nodes.forEach((n) -> {
             if (n instanceof ChoiceNode)
-                ((ChoiceNode) n).removeChild(node);});
+                ((ChoiceNode) n).removeChild(node);
+        });
 
         cleanupNodes(subgraph);
         return subgraph;
@@ -105,7 +107,7 @@ public class Tree {
 
     public List<Tree> deleteNode(TreeNode node) {
         List<Tree> childrenTrees = null;
-        if (node instanceof ChoiceNode){
+        if (node instanceof ChoiceNode) {
             List<TreeNode> children = ((ChoiceNode) node).getGraphChildren();
             childrenTrees = new LinkedList<>();
             int size = children.size();
@@ -116,7 +118,9 @@ public class Tree {
                 childrenTrees.add(newTree);
             }
         }
-        nodes.forEach(n -> {if(n instanceof ChoiceNode) ((ChoiceNode) n).removeChild(node);} );
+        nodes.forEach(n -> {
+            if (n instanceof ChoiceNode) ((ChoiceNode) n).removeChild(node);
+        });
         nodes.remove(node);
         cleanupNodes(Collections.singleton(node));
         toggleIntegrityChange();
@@ -133,11 +137,11 @@ public class Tree {
         nodes.addAll(subgraph);
     }
 
-    private boolean isDescendantOf(TreeNode parent, TreeNode descendant){
+    private boolean isDescendantOf(TreeNode parent, TreeNode descendant) {
         boolean isDescendant = false;
-        if (parent instanceof ChoiceNode){
+        if (parent instanceof ChoiceNode) {
             Queue<TreeNode> queue = new LinkedList<>(((ChoiceNode) parent).getGraphChildren());
-            while (!queue.isEmpty() && !isDescendant){
+            while (!queue.isEmpty() && !isDescendant) {
                 TreeNode n = queue.poll();
                 isDescendant = n == descendant;
                 if (n instanceof ChoiceNode)
@@ -149,7 +153,7 @@ public class Tree {
 
     public void swap(TreeNode originNode, TreeNode targetNode) {
         boolean related = false;
-        if (nodes.contains(targetNode)){
+        if (nodes.contains(targetNode)) {
             related = isDescendantOf(originNode, targetNode) || isDescendantOf(targetNode, originNode);
         }
 
@@ -158,24 +162,25 @@ public class Tree {
             AtomicInteger position = new AtomicInteger(0);
             if (originNode != root) {
                 nodes.forEach((n) -> {
-                    if (n instanceof ChoiceNode){
+                    if (n instanceof ChoiceNode) {
                         List<TreeNode> children = ((ChoiceNode) n).getGraphChildren();
                         if (children.contains(originNode)) {
                             parent.compareAndSet(null, n);
                             position.set(children.indexOf(originNode));
                         }
-                    }});
+                    }
+                });
                 Set<TreeNode> originSubtree = removeSubtree(originNode);
                 Set<TreeNode> targetSubtree = targetNode.getTree().appendAndRemove(targetNode, originNode, originSubtree);
                 appendSubgraph(targetSubtree, parent.get(), targetNode, position.get());
             } else {
-                if (targetNode != targetNode.getTree().getRoot()){
+                if (targetNode != targetNode.getTree().getRoot()) {
                     targetNode.getTree().swap(targetNode, originNode);
                 } else {
                     cleanupNodes(getNodes());
                     Set<TreeNode> newNodes = targetNode.getTree().getNodes();
                     TreeNode newRoot = targetNode.getTree().getRoot();
-                    targetNode.getTree().setTree(getRoot(),getNodes());
+                    targetNode.getTree().setTree(getRoot(), getNodes());
                     this.nodes = newNodes;
                     this.root = newRoot;
                     initializeNodes(getNodes());
@@ -185,7 +190,7 @@ public class Tree {
         }
     }
 
-    private void setTree(TreeNode root, Set<TreeNode> nodes){
+    private void setTree(TreeNode root, Set<TreeNode> nodes) {
         cleanupNodes(this.nodes);
         this.root = root;
         this.nodes = nodes;
@@ -196,15 +201,16 @@ public class Tree {
     private Set<TreeNode> appendAndRemove(TreeNode targetNode, TreeNode originNode, Set<TreeNode> originSubtree) {
         AtomicReference<TreeNode> parent = new AtomicReference<>();
         AtomicInteger position = new AtomicInteger(0);
-        if (targetNode!=root) {
+        if (targetNode != root) {
             nodes.forEach((n) -> {
                 if (n instanceof ChoiceNode) {
                     int index = ((ChoiceNode) n).removeChild(targetNode);
-                    if (-1 < index){
+                    if (-1 < index) {
                         parent.set(n);
                         position.set(index);
                     }
-                }});
+                }
+            });
             appendSubgraph(originSubtree, parent.get(), originNode, position.get());
         } else {
             this.root = originNode;
@@ -214,18 +220,18 @@ public class Tree {
         return removeSubtree(targetNode);
     }
 
-    private void invalidateSolution(){
+    private void invalidateSolution() {
         this.nodes.forEach(node -> {
-            if(node instanceof Outcome)
+            if (node instanceof Outcome)
                 node.setSolution(false);
         });
     }
 
-    public void setSolution(int[][] outcomes, Player[] players){
+    public void setSolution(int[][] outcomes, Player[] players) {
         this.nodes.forEach(node -> {
-            if (node instanceof Outcome){
+            if (node instanceof Outcome) {
                 boolean isSolution = false;
-                for (int[] o: outcomes) {
+                for (int[] o : outcomes) {
                     boolean sameOutcome = true;
                     for (int i = 0; i < players.length; i++) {
                         sameOutcome = sameOutcome && ((Outcome) node).getPlayerOutcome(players[i]) == o[i];

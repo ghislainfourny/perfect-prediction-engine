@@ -4,20 +4,23 @@ import ch.ethz.gametheory.gamecreator.controllers.ForestController;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 public class TreePane extends Group {
-
 
     private static final int TREE_HORIZONTAL_PADDING = 30;
     private static final int TREE_VERTICAL_PADDING = 30;
@@ -30,30 +33,13 @@ public class TreePane extends Group {
 
     private ForestController forestController;
 
-    public TreePane(ForestController forestController, TreeNode root){
-        super();
-        this.forestController = forestController;
-        this.passedCheckProperty = new SimpleBooleanProperty(false);
-        this.tree = new Tree(root);
-        this.tree.integrityChangeProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (getTree().getNodes().isEmpty()){
-                forestController.removeTreePane(this);
-            } else {
-                setPassedCheck(false);
-                printTree();
-            }
-        });
-
-        printTree();
-    }
-
     public TreePane(ForestController forestController, Tree tree) {
         super();
         this.forestController = forestController;
         this.passedCheckProperty = new SimpleBooleanProperty(false);
         this.tree = tree;
         this.tree.integrityChangeProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (getTree().getNodes().isEmpty()){
+            if (getTree().getNodes().isEmpty()) {
                 forestController.removeTreePane(this);
             } else {
                 setPassedCheck(false);
@@ -64,11 +50,11 @@ public class TreePane extends Group {
         printTree();
     }
 
-    public BooleanProperty passedCheckProperty(){
+    public BooleanProperty passedCheckProperty() {
         return this.passedCheckProperty;
     }
 
-    public void setPassedCheck(boolean value){
+    public void setPassedCheck(boolean value) {
         this.passedCheckProperty.set(value);
     }
 
@@ -80,16 +66,16 @@ public class TreePane extends Group {
         setNormalStructure();
     }
 
-    private ObjectBinding<Point2D> getTransformedBinding(TreeNode node, Pane pane){
+    private ObjectBinding<Point2D> getTransformedBinding(TreeNode node, Pane pane) {
         return Bindings.createObjectBinding(() -> {
                     Bounds nodeLocal = node.getBoundsInLocal();
-                    double x = node.getCenterX()-nodeLocal.getMinX();
-                    double y = node.getCenterY()-nodeLocal.getMinY();
+                    double x = node.getCenterX() - nodeLocal.getMinX();
+                    double y = node.getCenterY() - nodeLocal.getMinY();
                     Bounds nodeScene = node.getLocalToSceneTransform().transform(nodeLocal);
                     Bounds newLocal = pane.sceneToLocal(nodeScene);
                     return new Point2D(newLocal.getMinX() + x, newLocal.getMinY() + y);
-                }, node.boundsInLocalProperty(), node.centerXProperty(), node.centerYProperty(),node.localToSceneTransformProperty(),
-                pane.localToSceneTransformProperty() , node.localToParentTransformProperty()
+                }, node.boundsInLocalProperty(), node.centerXProperty(), node.centerYProperty(), node.localToSceneTransformProperty(),
+                pane.localToSceneTransformProperty(), node.localToParentTransformProperty()
         );
     }
 
@@ -108,13 +94,13 @@ public class TreePane extends Group {
         nodeQueue.add(getTree().getRoot());
         vboxQueue.add(rootBox);
 
-        Insets insets = new Insets(VERTICAL_MARGIN, HORIZONTAL_MARGIN,0, HORIZONTAL_MARGIN);
+        Insets insets = new Insets(VERTICAL_MARGIN, HORIZONTAL_MARGIN, 0, HORIZONTAL_MARGIN);
 
-        while (!nodeQueue.isEmpty()){
+        while (!nodeQueue.isEmpty()) {
             VBox parentVBox = vboxQueue.poll();
             TreeNode parentNode = nodeQueue.poll();
-            if (parentNode instanceof ChoiceNode){
-                List <TreeNode> children = ((ChoiceNode) parentNode).getGraphChildren();
+            if (parentNode instanceof ChoiceNode) {
+                List<TreeNode> children = ((ChoiceNode) parentNode).getGraphChildren();
                 HBox nextLvl = new HBox();
                 nextLvl.setSpacing(HORIZONTAL_MARGIN);
                 ObjectBinding<Point2D> parentTransformedBounds = getTransformedBinding(parentNode, edges);
@@ -154,53 +140,41 @@ public class TreePane extends Group {
                     parentVBox.getChildren().add(nextLvl);
                 }
             }
-
         }
         this.getChildren().addAll(edges, rootBox);
 
     }
 
-    private void setEvents(TreeNode shape) {
-        // Selecting
-        shape.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.isControlDown()) {
-                forestController.toggleSelectedNode(shape);
-            } else {
-                forestController.setSelectedNode(shape);
-            }
-            mouseEvent.consume();
-        });
-
+    private void setEvents(TreeNode node) {
         // MouseDrag
-        shape.setOnDragDetected(mouseEvent -> {
-            shape.startFullDrag();
+        node.setOnDragDetected(mouseEvent -> {
+            node.startFullDrag();
             forestController.startConnecting((TreeNode) mouseEvent.getSource(),
                     mouseEvent.getSceneX(), mouseEvent.getSceneY());
             mouseEvent.consume();
         });
-        shape.setOnMouseDragOver(mouseDragEvent -> {
+        node.setOnMouseDragOver(mouseDragEvent -> {
             forestController.updateConnecting(mouseDragEvent.getSceneX(), mouseDragEvent.getSceneY(),
                     mouseDragEvent.getSource());
             mouseDragEvent.consume();
         });
-        shape.setOnMouseDragged(mouseEvent -> {
+        node.setOnMouseDragged(mouseEvent -> {
             forestController.updateConnecting(mouseEvent.getSceneX(), mouseEvent.getSceneY(),
                     mouseEvent.getPickResult().getIntersectedNode());
             mouseEvent.consume();
         });
 
-        shape.setOnMouseDragEntered(mouseDragEvent -> {
+        node.setOnMouseDragEntered(mouseDragEvent -> {
             forestController.setTargetNode((TreeNode) mouseDragEvent.getSource());
             mouseDragEvent.consume();
         });
-        shape.setOnMouseDragReleased(mouseDragEvent -> {
+        node.setOnMouseDragReleased(mouseDragEvent -> {
             forestController.commitDragAndDropAction();
             mouseDragEvent.consume();
         });
-
     }
 
-    public TreeNode getRootNode(){
+    public TreeNode getRootNode() {
         return tree.getRoot();
     }
 

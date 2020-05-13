@@ -1,6 +1,6 @@
 package ch.ethz.gametheory.gamecreator.xmlhelper;
 
-import ch.ethz.gametheory.gamecreator.InformationSet;
+import ch.ethz.gametheory.gamecreator.data.InformationSet;
 
 public class InformationSetXML {
     public int ID;

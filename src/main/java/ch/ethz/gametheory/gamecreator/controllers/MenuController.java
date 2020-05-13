@@ -16,14 +16,15 @@ public class MenuController {
     private MainController mainController;
     private File mostRecentSavedFile;
 
-    @FXML public void saveAsWorkspace() {
+    @FXML
+    public void saveAsWorkspace() {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extensionFilter);
         File file = fileChooser.showSaveDialog(mainController.getStage());
 
-        if (file != null){
-            if (!file.getPath().endsWith(".xml")){
+        if (file != null) {
+            if (!file.getPath().endsWith(".xml")) {
                 file = new File(file.getPath() + ".xml");
             }
             mainController.getStage().setTitle("Game Tree Builder - " + file.getName());
@@ -33,25 +34,27 @@ public class MenuController {
         }
     }
 
-    @FXML public void saveWorkspace() {
+    @FXML
+    public void saveWorkspace() {
         if (mostRecentSavedFile == null)
             saveAsWorkspace();
         else
             this.mainController.saveState(mostRecentSavedFile);
     }
 
-    @FXML public void openSave() throws Exception {
+    @FXML
+    public void openSave() throws Exception {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extensionFilter);
         File file = fileChooser.showOpenDialog(mainController.getStage());
 
-        if (file != null){
+        if (file != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Warning");
             alert.setHeaderText("Are you sure you want to load this file? All unsaved progress will be lost.");
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK){
+            if (result.get() == ButtonType.OK) {
                 GUI newWindow = newWindow();
                 newWindow.loadFile(file);
                 closeApplication();
@@ -59,14 +62,15 @@ public class MenuController {
         }
     }
 
-    @FXML public GUI newWindow() throws Exception {
+    @FXML
+    public GUI newWindow() throws Exception {
         GUI newInstance = new GUI();
         newInstance.init();
         newInstance.start(new Stage());
         return newInstance;
     }
 
-    void init(MainController mainController){
+    void init(MainController mainController) {
         this.mainController = mainController;
     }
 
@@ -74,7 +78,8 @@ public class MenuController {
         this.mostRecentSavedFile = mostRecentSavedFile;
     }
 
-    @FXML public void closeApplication() {
+    @FXML
+    public void closeApplication() {
         mainController.getStage().close();
     }
 }

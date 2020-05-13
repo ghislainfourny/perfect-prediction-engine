@@ -1,4 +1,4 @@
-package ch.ethz.gametheory.gamecreator;
+package ch.ethz.gametheory.gamecreator.data;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -9,12 +9,12 @@ public class Player {
 
     private final int id;
     private StringProperty name;
-    private BooleanProperty isDeleted;
+    private BooleanProperty deleted;
 
     public Player(int id) {
         this.id = id;
         name = new SimpleStringProperty("");
-        isDeleted = new SimpleBooleanProperty(false);
+        deleted = new SimpleBooleanProperty(false);
     }
 
     public int getId() {
@@ -26,7 +26,7 @@ public class Player {
     }
 
     public void setName(String name) {
-        if (!getName().equals(name.trim())){
+        if (!getName().equals(name.trim())) {
             this.name.set(name.trim());
         }
     }
@@ -35,16 +35,16 @@ public class Player {
         return name.get();
     }
 
-    BooleanProperty isDeletedProperty() {
-        return isDeleted;
+    public BooleanProperty deletedProperty() {
+        return deleted;
     }
 
-    public void setDeleted(){
-        isDeleted.set(true);
+    public void setDeleted() {
+        deleted.set(true);
     }
 
     @Override
     public String toString() {
-        return getName().isEmpty()?"Player " + id:getName();
+        return getName().isEmpty() ? "Player " + id : getName();
     }
 }

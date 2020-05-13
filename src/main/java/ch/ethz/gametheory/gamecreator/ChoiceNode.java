@@ -1,6 +1,9 @@
 package ch.ethz.gametheory.gamecreator;
 
 import ch.ethz.gametheory.gamecreator.controllers.ForestController;
+import ch.ethz.gametheory.gamecreator.data.DataModel;
+import ch.ethz.gametheory.gamecreator.data.InformationSet;
+import ch.ethz.gametheory.gamecreator.data.Player;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
@@ -25,22 +28,26 @@ public class ChoiceNode extends TreeNode {
     private Circle circle;
     private Label playerText;
     private List<TreeNode> children;
-    private BooleanProperty isDeleted;
+    private BooleanProperty deleted;
 
-    public ChoiceNode(DoubleProperty scale){
-        this(new Circle(), new Label(), scale);
+    public ChoiceNode(DataModel dataModel) {
+        this(new Circle(), new Label(), dataModel);
     }
 
-    private ChoiceNode(Circle circle, Label playerText, DoubleProperty scale){
+    private ChoiceNode(Circle circle, Label playerText, DataModel dataModel) {
         super(circle, playerText);
+        setEvents(dataModel);
         this.circle = circle;
         this.playerText = playerText;
         this.children = new ArrayList<>();
-        this.deletedListener = (observableValue, paint, t1) -> {setInformationSet(null); toggleChanged();};
+        this.deletedListener = (observableValue, paint, t1) -> {
+            setInformationSet(null);
+            toggleChanged();
+        };
         this.playerListener = (observableValue, paint, t1) -> {
             this.playerText.textProperty().unbind();
             this.playerText.setText("");
-            if(observableValue.getValue()!=null){
+            if (observableValue.getValue() != null) {
                 this.playerText.textProperty().bind(observableValue.getValue().nameProperty());
             }
             toggleChanged();
@@ -53,7 +60,7 @@ public class ChoiceNode extends TreeNode {
         this.playerText.setAlignment(Pos.CENTER);
         this.circle.setStrokeWidth(2.0);
         this.circle.setStroke(normalColor);
-        this.circle.radiusProperty().bind(scale.multiply(NODE_SIZE));
+        this.circle.radiusProperty().bind(dataModel.scaleProperty().multiply(NODE_SIZE));
 
         this.playerText.visibleProperty().bind(ForestController.showPlayersProperty());
         this.playerText.setTextFill(Color.BLACK);
@@ -81,26 +88,26 @@ public class ChoiceNode extends TreeNode {
         toggleChanged();
     }
 
-    int removeChild(TreeNode node){
+    int removeChild(TreeNode node) {
         int index = this.children.indexOf(node);
         boolean removed = this.children.remove(node);
-        if (removed){
+        if (removed) {
             toggleChanged();
         }
         return index;
     }
 
-    private void setFontColor(Color color){
-        double luminance = (color.getRed()*0.299 + color.getGreen()*0.587 + color.getBlue()*0.114);
+    private void setFontColor(Color color) {
+        double luminance = (color.getRed() * 0.299 + color.getGreen() * 0.587 + color.getBlue() * 0.114);
         int r;
         if (luminance > 0.5)
             r = 0;
         else
             r = 255;
-        this.playerText.setTextFill(Color.rgb(r,r,r));
+        this.playerText.setTextFill(Color.rgb(r, r, r));
     }
 
-    private void setDefaultColor(){
+    private void setDefaultColor() {
         this.circle.setFill(Color.LIGHTGREY);
     }
 
@@ -108,8 +115,8 @@ public class ChoiceNode extends TreeNode {
         return informationSet;
     }
 
-    private void cleanInformationset(){
-        this.informationSet.isDeletedProperty().removeListener(deletedListener);
+    private void cleanInformationset() {
+        this.informationSet.deletedProperty().removeListener(deletedListener);
         this.informationSet.playerProperty().removeListener(playerListener);
         this.informationSet.getColorProperty().unbind();
         this.playerText.textProperty().unbind();
@@ -127,17 +134,17 @@ public class ChoiceNode extends TreeNode {
             this.informationSet = informationSet;
 
             if (informationSet != null) {
-                    this.informationSet.isDeletedProperty().addListener(deletedListener);
-                    this.informationSet.playerProperty().addListener(playerListener);
-                    this.circle.fillProperty().bind(informationSet.getColorProperty());
-                    if (this.informationSet.getAssignedPlayer() != null)
-                        this.playerText.textProperty().bind(this.informationSet.getAssignedPlayer().nameProperty());
+                this.informationSet.deletedProperty().addListener(deletedListener);
+                this.informationSet.playerProperty().addListener(playerListener);
+                this.circle.fillProperty().bind(informationSet.getColorProperty());
+                if (this.informationSet.getAssignedPlayer() != null)
+                    this.playerText.textProperty().bind(this.informationSet.getAssignedPlayer().nameProperty());
             } else
                 setDefaultColor();
         }
     }
 
-    public double getRadius(){
+    public double getRadius() {
         return this.circle.getRadius();
     }
 
@@ -161,12 +168,24 @@ public class ChoiceNode extends TreeNode {
 
     @Override
     public void setSelected(boolean value) {
-        this.circle.setStroke(value?selectedColor:normalColor);
+        this.circle.setStroke(value ? selectedColor : normalColor);
     }
 
     @Override
     public BooleanProperty deletedProperty() {
         return null;
+    }
+
+    private void setEvents(DataModel dataModel) {
+        // Selecting
+        this.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.isControlDown()) {
+                dataModel.toggleSelectedNode(this);
+            } else {
+                dataModel.setSelectedNode(this);
+            }
+            mouseEvent.consume();
+        });
     }
 
 }

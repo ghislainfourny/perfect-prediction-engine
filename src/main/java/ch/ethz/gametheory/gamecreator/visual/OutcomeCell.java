@@ -1,6 +1,7 @@
-package ch.ethz.gametheory.gamecreator;
+package ch.ethz.gametheory.gamecreator.visual;
 
-import ch.ethz.gametheory.gamecreator.data.DataModel;
+import ch.ethz.gametheory.gamecreator.data.Model;
+import ch.ethz.gametheory.gamecreator.data.Outcome;
 import ch.ethz.gametheory.gamecreator.data.Player;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -11,17 +12,17 @@ import javafx.scene.layout.Priority;
 
 public class OutcomeCell extends ListCell<Player> {
 
-    private Label playerLbl;
-    private TextField number;
-    private HBox hBox;
-    private DataModel dataModel;
+    private final Label playerLbl;
+    private final TextField number;
+    private final HBox hBox;
+    private final Model model;
 
-    public OutcomeCell(DataModel dataModel) {
+    public OutcomeCell(Model model) {
         super();
         hBox = new HBox();
         playerLbl = new Label();
         number = new TextField();
-        this.dataModel = dataModel;
+        this.model = model;
 
         hBox.getChildren().addAll(playerLbl, number);
         hBox.setSpacing(10.0);
@@ -42,7 +43,7 @@ public class OutcomeCell extends ListCell<Player> {
                     newPayoff = Integer.MAX_VALUE;
                 }
                 number.setText("" + newPayoff);
-                for (Outcome o : dataModel.getSelectedOutcomes()) {
+                for (Outcome o : model.getSelectedOutcomes()) {
                     o.setPlayerOutcome(OutcomeCell.super.getItem(), newPayoff);
                 }
             }
@@ -61,7 +62,7 @@ public class OutcomeCell extends ListCell<Player> {
             int outcomeValue = 0;
             boolean hasChanged = false;
             boolean first = true;
-            for (Outcome o : dataModel.getSelectedOutcomes()) {
+            for (Outcome o : model.getSelectedOutcomes()) {
                 int playerValue = o.getPlayerOutcome(player);
                 if (first) {
                     outcomeValue = playerValue;

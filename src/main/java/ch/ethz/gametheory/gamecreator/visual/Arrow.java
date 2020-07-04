@@ -1,4 +1,4 @@
-package ch.ethz.gametheory.gamecreator;
+package ch.ethz.gametheory.gamecreator.visual;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Paint;
@@ -10,13 +10,13 @@ public class Arrow extends Group {
     private final Line line;
     private final Polygon head;
     private final Polygon revHead;
-    private boolean doubled;
+    private final boolean doubled;
 
-    public Arrow(boolean doubled){
+    public Arrow(boolean doubled) {
         this(doubled, new Line(), new Polygon(), new Polygon());
     }
 
-    private Arrow(boolean doubled, Line line, Polygon head, Polygon revHead){
+    private Arrow(boolean doubled, Line line, Polygon head, Polygon revHead) {
         super(line, head, revHead);
         this.doubled = doubled;
         this.line = line;
@@ -32,7 +32,7 @@ public class Arrow extends Group {
         double ex;
         double ey;
 
-        if (reversed){
+        if (reversed) {
             sx = line.getEndX();
             sy = line.getEndY();
             ex = line.getStartX();
@@ -46,33 +46,33 @@ public class Arrow extends Group {
 
         double headLength = 15.0;
         double headWidth = 10.0;
-        double direction = (ex-sx)/(ey-sy);
-        double yLength = Math.signum(sy-ey) * Math.sqrt((Math.pow(headLength, 2)/(1+Math.pow(direction, 2))));
-        double xLength = Math.signum(sx-ex) * Math.sqrt((Math.pow(headLength, 2)/(1+Math.pow(1/direction, 2))));
-        double yWidth = Math.signum(sx-ex) * Math.sqrt((Math.pow(headWidth, 2)/(1+Math.pow(1/direction, 2))));
-        double xWidth = Math.signum(sy-ey) * Math.sqrt((Math.pow(headWidth, 2)/(1+Math.pow(direction, 2)))) ;
+        double direction = (ex - sx) / (ey - sy);
+        double yLength = Math.signum(sy - ey) * Math.sqrt((Math.pow(headLength, 2) / (1 + Math.pow(direction, 2))));
+        double xLength = Math.signum(sx - ex) * Math.sqrt((Math.pow(headLength, 2) / (1 + Math.pow(1 / direction, 2))));
+        double yWidth = Math.signum(sx - ex) * Math.sqrt((Math.pow(headWidth, 2) / (1 + Math.pow(1 / direction, 2))));
+        double xWidth = Math.signum(sy - ey) * Math.sqrt((Math.pow(headWidth, 2) / (1 + Math.pow(direction, 2))));
 
-        if (reversed){
+        if (reversed) {
             revHead.getPoints().clear();
             revHead.getPoints().addAll(ex, ey,
-                    ex+xLength+xWidth, ey+yLength-yWidth,
-                    ex+xLength-xWidth, ey+yLength+yWidth);
+                    ex + xLength + xWidth, ey + yLength - yWidth,
+                    ex + xLength - xWidth, ey + yLength + yWidth);
         } else {
             head.getPoints().clear();
             head.getPoints().addAll(ex, ey,
-                    ex+xLength+xWidth, ey+yLength-yWidth,
-                    ex+xLength-xWidth, ey+yLength+yWidth);
+                    ex + xLength + xWidth, ey + yLength - yWidth,
+                    ex + xLength - xWidth, ey + yLength + yWidth);
         }
 
     }
 
-    public void setFill(Paint value){
+    public void setFill(Paint value) {
         this.line.setStroke(value);
         this.head.setFill(value);
         this.revHead.setFill(value);
     }
 
-    public void setStartPoint(double startX, double startY){
+    public void setStartPoint(double startX, double startY) {
         this.line.setStartX(startX);
         this.line.setStartY(startY);
         updateHead(false);
@@ -80,11 +80,11 @@ public class Arrow extends Group {
             updateHead(true);
     }
 
-    public void setEndPoint(double endX, double endY){
+    public void setEndPoint(double endX, double endY) {
         this.line.setEndX(endX);
         this.line.setEndY(endY);
 
-        if (getStartX()==getEndX()&&getStartY()==getEndY()){
+        if (getStartX() == getEndX() && getStartY() == getEndY()) {
             this.line.setVisible(false);
             this.head.setVisible(false);
         } else {

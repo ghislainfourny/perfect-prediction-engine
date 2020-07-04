@@ -1,4 +1,4 @@
-package ch.ethz.gametheory.gamecreator;
+package ch.ethz.gametheory.gamecreator.visual;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class NotificationBoxElement extends HBox {
 
@@ -36,9 +37,12 @@ public class NotificationBoxElement extends HBox {
         Label closeObject = new Label("x");
         closeObject.getStyleClass().remove("label");
         closeObject.setAlignment(Pos.CENTER_RIGHT);
+        closeObject.setFont(Font.font(18));
         closeObject.setOnMouseClicked(n -> {
             notificationBox.getChildren().remove(this);
         });
+        closeObject.setOnMouseEntered(mouseEvent -> closeObject.setTextFill(Color.WHITE));
+        closeObject.setOnMouseExited(mouseEvent -> closeObject.setTextFill(Color.BLACK));
         return closeObject;
     }
 

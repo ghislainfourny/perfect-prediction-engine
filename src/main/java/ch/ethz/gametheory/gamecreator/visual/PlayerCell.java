@@ -1,6 +1,6 @@
-package ch.ethz.gametheory.gamecreator;
+package ch.ethz.gametheory.gamecreator.visual;
 
-import ch.ethz.gametheory.gamecreator.data.DataModel;
+import ch.ethz.gametheory.gamecreator.data.Model;
 import ch.ethz.gametheory.gamecreator.data.Player;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -17,11 +17,11 @@ import javafx.scene.text.Text;
 
 public class PlayerCell extends ListCell<Player> {
 
-    private HBox hBox = new HBox();
-    private Label label = new Label();
-    private TextField textField = new TextField();
+    private final HBox hBox = new HBox();
+    private final Label label = new Label();
+    private final TextField textField = new TextField();
 
-    public PlayerCell(DataModel dataModel) {
+    public PlayerCell(Model model) {
         super();
         Button button = new Button();
         Pane pane = new Pane();
@@ -42,7 +42,7 @@ public class PlayerCell extends ListCell<Player> {
         button.setGraphic(text);
         button.setId("button-negative");
 
-        button.setOnAction(event -> dataModel.removePlayer(PlayerCell.this.getItem()));
+        button.setOnAction(event -> model.removePlayer(PlayerCell.this.getItem()));
         textField.textProperty().addListener((observableValue, s, t1) -> PlayerCell.this.getItem().setName(observableValue.getValue())
         );
     }

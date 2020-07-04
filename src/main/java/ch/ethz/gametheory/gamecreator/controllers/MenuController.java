@@ -54,7 +54,7 @@ public class MenuController {
             alert.setTitle("Warning");
             alert.setHeaderText("Are you sure you want to load this file? All unsaved progress will be lost.");
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
+            if (result.isPresent() && result.get() == ButtonType.OK) {
                 GUI newWindow = newWindow();
                 newWindow.loadFile(file);
                 closeApplication();

@@ -1,8 +1,7 @@
 package ch.ethz.gametheory.gamecreator.xmlhelper;
 
-import ch.ethz.gametheory.gamecreator.ChoiceNode;
-import ch.ethz.gametheory.gamecreator.Tree;
-import ch.ethz.gametheory.gamecreator.TreeNode;
+import ch.ethz.gametheory.gamecreator.data.ChoiceNode;
+import ch.ethz.gametheory.gamecreator.data.TreeNode;
 
 import java.util.LinkedList;
 import java.util.List;

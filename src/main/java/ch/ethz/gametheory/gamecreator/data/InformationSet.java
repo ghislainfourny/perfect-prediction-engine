@@ -12,10 +12,10 @@ import java.util.Random;
 
 public class InformationSet {
 
-    private ObjectProperty<Paint> color;
-    private ObjectProperty<Player> assignedPlayer;
-    private BooleanProperty deleted;
-    private ChangeListener<Boolean> isDeletedListener;
+    private final ObjectProperty<Paint> color;
+    private final ObjectProperty<Player> assignedPlayer;
+    private final BooleanProperty deleted;
+    private final ChangeListener<Boolean> isDeletedListener;
     private final int id;
 
     public InformationSet(int id) {

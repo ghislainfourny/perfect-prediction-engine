@@ -28,7 +28,7 @@
             <graphic>
                 <AnchorPane/>
             </graphic>
-            <AnchorPane fx:id="AnchorPaneNodes"/>
+            <AnchorPane fx:id="containerChoiceNodesPanel"/>
         </TitledPane>
         <TitledPane fx:id="TPOutcomes" contentDisplay="RIGHT">
             <graphic>

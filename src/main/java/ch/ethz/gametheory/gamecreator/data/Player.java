@@ -8,8 +8,8 @@ import javafx.beans.property.StringProperty;
 public class Player {
 
     private final int id;
-    private StringProperty name;
-    private BooleanProperty deleted;
+    private final StringProperty name;
+    private final BooleanProperty deleted;
 
     public Player(int id) {
         this.id = id;

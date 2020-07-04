@@ -1,7 +1,7 @@
-package ch.ethz.gametheory.gamecreator;
+package ch.ethz.gametheory.gamecreator.visual;
 
-import ch.ethz.gametheory.gamecreator.data.DataModel;
 import ch.ethz.gametheory.gamecreator.data.InformationSet;
+import ch.ethz.gametheory.gamecreator.data.Model;
 import ch.ethz.gametheory.gamecreator.data.Player;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -20,7 +20,7 @@ public class InformationSetCell extends ListCell<InformationSet> {
     private ComboBox<Player> playerComboBox = new ComboBox<>();
     private ColorPicker colorPicker = new ColorPicker();
 
-    public InformationSetCell(DataModel dataModel) {
+    public InformationSetCell(Model model) {
         super();
         Button button = new Button();
         Pane pane = new Pane();
@@ -44,9 +44,9 @@ public class InformationSetCell extends ListCell<InformationSet> {
         text.setFill(Color.WHITE);
         button.setGraphic(text);
         button.setId("button-negative");
-        button.setOnAction(event -> dataModel.removeInformationSet(InformationSetCell.this.getItem()));
+        button.setOnAction(event -> model.removeInformationSet(InformationSetCell.this.getItem()));
 
-        playerComboBox.setItems(dataModel.getPlayers());
+        playerComboBox.setItems(model.getPlayers());
         playerComboBox.setPrefWidth(130);
         playerComboBox.setPlaceholder(new Text("No players available!"));
         playerComboBox.valueProperty().addListener((observableValue, o, t1) -> {

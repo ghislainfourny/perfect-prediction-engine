@@ -1,10 +1,6 @@
 package ch.ethz.gametheory.gamecreator.xmlhelper;
 
-import ch.ethz.gametheory.gamecreator.ChoiceNode;
-import ch.ethz.gametheory.gamecreator.Outcome;
-import ch.ethz.gametheory.gamecreator.Tree;
-import ch.ethz.gametheory.gamecreator.TreeNode;
-import ch.ethz.gametheory.gamecreator.data.DataModel;
+import ch.ethz.gametheory.gamecreator.data.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +12,7 @@ public class TreeXML {
     public List<ChoiceNodeXML> choiceNodes;
     public List<OutcomeXML> outcomes;
 
-    public static TreeXML convert(Tree tree, Map<TreeNode, Integer> uniqueIdentifier, AtomicInteger counter, DataModel dataModel) {
+    public static TreeXML convert(Tree tree, Map<TreeNode, Integer> uniqueIdentifier, AtomicInteger counter, Model model) {
         if (tree == null) {
             return null;
         }
@@ -24,19 +20,23 @@ public class TreeXML {
         TreeXML treeXML = new TreeXML();
         treeXML.choiceNodes = new LinkedList<>();
         treeXML.outcomes = new LinkedList<>();
-        treeXML.rootNode = uniqueIdentifier.getOrDefault(tree.getRoot(), counter.getAndIncrement());
-        uniqueIdentifier.put(tree.getRoot(), treeXML.rootNode);
-        tree.getNodes().forEach(node -> {
-            if (node instanceof ChoiceNode){
-                ChoiceNodeXML choiceNodeXML = ChoiceNodeXML.convert((ChoiceNode) node, uniqueIdentifier, counter);
-                treeXML.choiceNodes.add(choiceNodeXML);
-            } else if (node instanceof Outcome) {
-                OutcomeXML o = OutcomeXML.convert((Outcome) node, uniqueIdentifier, counter, dataModel);
-                treeXML.outcomes.add(o);
-            }
-        });
+        TreeNode root = tree.getRoot();
+        treeXML.rootNode = uniqueIdentifier.getOrDefault(root, counter.getAndIncrement());
+        uniqueIdentifier.put(root, treeXML.rootNode);
+        addNodes(root, uniqueIdentifier, counter, model, treeXML);
         return treeXML;
 
+    }
+
+    private static void addNodes(TreeNode treeNode, Map<TreeNode, Integer> uniqueIdentifier, AtomicInteger counter, Model model, TreeXML treeXML) {
+        if (treeNode instanceof ChoiceNode) {
+            ChoiceNodeXML choiceNodeXML = ChoiceNodeXML.convert((ChoiceNode) treeNode, uniqueIdentifier, counter);
+            treeXML.choiceNodes.add(choiceNodeXML);
+            ((ChoiceNode) treeNode).getGraphChildren().forEach(treeNode1 -> addNodes(treeNode1, uniqueIdentifier, counter, model, treeXML));
+        } else if (treeNode instanceof Outcome) {
+            OutcomeXML o = OutcomeXML.convert((Outcome) treeNode, uniqueIdentifier, counter, model);
+            treeXML.outcomes.add(o);
+        }
     }
 
 }

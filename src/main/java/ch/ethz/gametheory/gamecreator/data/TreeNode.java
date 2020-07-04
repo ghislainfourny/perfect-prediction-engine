@@ -84,8 +84,11 @@ public abstract class TreeNode {
         if (parentNode != null) {
             parentNode.removeChild(this);
         }
+        if (tree.getRoot() == this) {
+            tree.setDeleted();
+        }
         Tree newTree = new Tree(this);
-        tree.toggleIntegrityChange();
+        tree.toggleStructureChange();
         return newTree;
     }
 

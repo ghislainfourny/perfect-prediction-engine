@@ -1,5 +1,7 @@
 package ch.ethz.gametheory.gamecreator.data;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 
 import javax.annotation.Nonnull;
@@ -10,8 +12,8 @@ import java.util.List;
 
 public class ChoiceNode extends TreeNode {
 
-    private InformationSet informationSet;
     private final List<TreeNode> children;
+    private final ObjectProperty<InformationSet> informationSet = new SimpleObjectProperty<>();
     private final ChangeListener<Boolean> informationSetListener;
     private final ChangeListener<Player> playerListener;
 
@@ -20,9 +22,9 @@ public class ChoiceNode extends TreeNode {
         this.children = new ArrayList<>();
         this.informationSetListener = (observableValue, paint, t1) -> {
             setInformationSet(null);
-            toggleChanged();
+            getTree().toggleIntegrityChange();
         };
-        this.playerListener = (observableValue, paint, t1) -> toggleChanged();
+        this.playerListener = (observableValue, paint, t1) -> getTree().toggleIntegrityChange();
     }
 
     @Override
@@ -37,28 +39,32 @@ public class ChoiceNode extends TreeNode {
     }
 
     private void cleanInformationSet() {
-        this.informationSet.deletedProperty().removeListener(informationSetListener);
-        this.informationSet.playerProperty().removeListener(playerListener);
-        this.informationSet.getColorProperty().unbind();
+        this.informationSet.get().deletedProperty().removeListener(informationSetListener);
+        this.informationSet.get().playerProperty().removeListener(playerListener);
     }
 
     public void setInformationSet(@Nullable InformationSet informationSet) {
-        if (this.informationSet != informationSet) {
-            toggleChanged();
-            if (this.informationSet != null)
+        if (this.informationSet.get() != informationSet) {
+            getTree().toggleIntegrityChange();
+            if (this.informationSet.get() != null) {
                 cleanInformationSet();
+            }
 
-            this.informationSet = informationSet;
+            this.informationSet.setValue(informationSet);
 
             if (informationSet != null) {
-                this.informationSet.deletedProperty().addListener(informationSetListener);
-                this.informationSet.playerProperty().addListener(playerListener);
+                this.informationSet.get().deletedProperty().addListener(informationSetListener);
+                this.informationSet.get().playerProperty().addListener(playerListener);
             }
         }
     }
 
     @Nullable
     public InformationSet getInformationSet() {
+        return informationSet.get();
+    }
+
+    public ObjectProperty<InformationSet> informationSetProperty() {
         return informationSet;
     }
 
@@ -78,29 +84,33 @@ public class ChoiceNode extends TreeNode {
         }
         node.setParentNode(this);
         node.assignTree(getTree());
-        getTree().toggleIntegrityChange();
+        getTree().toggleStructureChange();
     }
 
     void removeChild(TreeNode node) {
         boolean removed = this.children.remove(node);
         if (removed) {
-            toggleChanged();
+            getTree().toggleStructureChange();
         }
-        getTree().toggleIntegrityChange();
+        getTree().toggleStructureChange();
     }
 
     public List<Tree> deleteNode() {
         final List<Tree> childrenTrees = new LinkedList<>();
-        children.forEach(treeNode -> {
+        for (int i = 0; i < children.size(); i++) {
+            TreeNode treeNode = children.get(i);
             Tree tree = detachFromTree();
             childrenTrees.add(tree);
             removeChild(treeNode);
-        });
+        }
         ChoiceNode parentNode = getParentNode();
         if (parentNode != null) {
             parentNode.removeChild(this);
         }
-        toggleChanged();
+        if (getTree().getRoot() == this) {
+            getTree().setDeleted();
+        }
+        getTree().toggleStructureChange();
         return childrenTrees;
     }
 
@@ -113,10 +123,6 @@ public class ChoiceNode extends TreeNode {
     @Override
     boolean isDescendant(TreeNode treeNode) {
         return treeNode == this || children.parallelStream().anyMatch(treeNode1 -> treeNode1.isDescendant(treeNode));
-    }
-
-    private void toggleChanged() {
-        getTree().toggleIntegrityChange();
     }
 
 }

@@ -77,7 +77,10 @@ public class Outcome extends TreeNode {
             parentNode.removeChild(this);
         }
         Tree tree = getTree();
-        tree.toggleIntegrityChange();
+        if (getTree().getRoot() == this) {
+            getTree().setDeleted();
+        }
+        tree.toggleStructureChange();
         return new LinkedList<>();
     }
 

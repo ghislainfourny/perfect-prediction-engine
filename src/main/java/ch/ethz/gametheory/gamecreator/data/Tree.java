@@ -6,12 +6,30 @@ import javafx.beans.property.SimpleBooleanProperty;
 public class Tree {
 
     private final TreeNode root;
-    private final BooleanProperty integrityChange;
+    private final BooleanProperty integrityChange = new SimpleBooleanProperty();
+    private final BooleanProperty structureChange = new SimpleBooleanProperty();
+    private boolean deleted;
 
     public Tree(TreeNode root) {
         this.root = root;
         root.assignTree(this);
-        this.integrityChange = new SimpleBooleanProperty();
+        toggleStructureChange();
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    void setDeleted() {
+        deleted = true;
+    }
+
+    public BooleanProperty structureChangeProperty() {
+        return structureChange;
+    }
+
+    void toggleStructureChange() {
+        this.structureChange.set(!this.structureChange.get());
         toggleIntegrityChange();
     }
 

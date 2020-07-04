@@ -38,14 +38,14 @@ public class TreePane extends Group {
         this.model = model;
         this.passedCheckProperty = new SimpleBooleanProperty(false);
         this.tree = tree;
-        this.tree.integrityChangeProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (getTree().getRoot().getTree() != getTree()) {
+        this.tree.structureChangeProperty().addListener((observableValue, aBoolean, t1) -> {
+            if (getTree().isDeleted()) {
                 model.removeTree(tree);
             } else {
-                setPassedCheck(false);
                 printTree();
             }
         });
+        this.tree.integrityChangeProperty().addListener((observable, oldValue, newValue) -> setPassedCheck(false));
 
         printTree();
     }

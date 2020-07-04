@@ -50,6 +50,7 @@ public abstract class TreeNodeShape<SHAPE extends Shape, DATA extends TreeNode> 
 
     private void initLabel() {
         getLabel().setAlignment(Pos.CENTER);
+        getLabel().setTextFill(Color.BLACK);
         getLabel().getStyleClass().remove("label");
     }
 

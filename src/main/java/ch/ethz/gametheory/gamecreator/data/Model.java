@@ -109,7 +109,7 @@ public class Model {
         ChoiceNode choiceNode = new ChoiceNode();
         setSelectedNode(choiceNode);
         Tree tree = new Tree(choiceNode);
-        trees.add(tree);
+        trees.add(0, tree);
         return choiceNode;
     }
 
@@ -178,8 +178,8 @@ public class Model {
     }
 
     private void deleteSelectedChoiceNodes() {
-        for (Object t : selectedChoiceNodes) {
-            List<Tree> childrenTrees = ((TreeNode) t).deleteNode();
+        for (ChoiceNode t : selectedChoiceNodes) {
+            List<Tree> childrenTrees = t.deleteNode();
             trees.addAll(childrenTrees);
         }
         selectedChoiceNodes.clear();
@@ -248,8 +248,14 @@ public class Model {
         parent.addChild(subtree.getRoot(), -1);
     }
 
-    private void swapSubtrees(TreeNode first, TreeNode second) {
-        //first.getTree().swap(first, second);
+    private void swapSubtrees(TreeNode treeNodeA, TreeNode treeNodeB) {
+        /*
+        Tree treeA = treeNodeA.getTree();
+        Tree treeB = treeNodeB.getTree();
+        int treeIndexA = trees.indexOf(treeA);
+        int treeIndexB = trees.indexOf(treeB);
+        ChoiceNode parentNodeA = treeNodeA.getParentNode();
+        ChoiceNode parentNodeB = treeNodeB.getParentNode();*/
     }
 
     public void setDragAndDropOperation(@Nonnull DragAndDropOperation dragAndDropOperation) {
@@ -259,7 +265,7 @@ public class Model {
     public void commitDragAndDropAction() {
         TreeNodeShape<?, ?> originNode = originNodeShape.get();
         TreeNodeShape<?, ?> targetNode = targetNodeShape.get();
-        if (originNode != targetNode && originNode != null) {
+        if (originNode != targetNode && originNode != null && targetNode != null) {
             switch (dragAndDropOperation) {
                 case CONNECT:
                     assert originNode instanceof ChoiceNodeShape;

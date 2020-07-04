@@ -254,6 +254,7 @@ public class ForestController {
         this.model = model;
         this.model.addForestListener(change -> {
             while (change.next()) {
+                // TODO have same order as list (mainTree index 0)
                 change.getRemoved().forEach(this::removeTree);
                 change.getAddedSubList().forEach(this::addTreeNode);
             }

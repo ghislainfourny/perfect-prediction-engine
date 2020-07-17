@@ -109,7 +109,7 @@ public class Model {
         ChoiceNode choiceNode = new ChoiceNode();
         setSelectedNode(choiceNode);
         Tree tree = new Tree(choiceNode);
-        trees.add(0, tree);
+        trees.add(tree);
         return choiceNode;
     }
 
@@ -244,19 +244,67 @@ public class Model {
     }
 
     public void connectNodes(@Nonnull ChoiceNode parent, @Nonnull TreeNode child) {
-        Tree subtree = child.detachFromTree();
-        parent.addChild(subtree.getRoot(), -1);
+        if (!child.isDescendant(parent)) {
+            Tree subtree = child.detachFromTree();
+            parent.addChild(subtree.getRoot(), -1);
+        }
     }
 
     private void swapSubtrees(TreeNode treeNodeA, TreeNode treeNodeB) {
-        /*
-        Tree treeA = treeNodeA.getTree();
-        Tree treeB = treeNodeB.getTree();
-        int treeIndexA = trees.indexOf(treeA);
-        int treeIndexB = trees.indexOf(treeB);
-        ChoiceNode parentNodeA = treeNodeA.getParentNode();
-        ChoiceNode parentNodeB = treeNodeB.getParentNode();*/
+        if (!treeNodeA.isDescendant(treeNodeB) && !treeNodeB.isDescendant(treeNodeA)) {
+            Tree treeA = treeNodeA.getTree();
+            Tree treeB = treeNodeB.getTree();
+            int treeIndexA = trees.indexOf(treeA);
+            int treeIndexB = trees.indexOf(treeB);
+            ChoiceNode parentNodeA = treeNodeA.getParentNode();
+            ChoiceNode parentNodeB = treeNodeB.getParentNode();
+            if (parentNodeA == null) {
+                if (parentNodeB == null) {
+                    swapTwoRoot(treeA, treeB, treeIndexA, treeIndexB);
+                } else {
+                    swapOneRoot(treeNodeB, treeNodeA, treeA, treeIndexA, parentNodeB);
+                }
+            } else {
+                if (parentNodeB == null) {
+                    swapOneRoot(treeNodeA, treeNodeB, treeB, treeIndexB, parentNodeA);
+                } else {
+                    swapZeroRoot(treeNodeA, treeNodeB, parentNodeA, parentNodeB);
+                }
+            }
+        }
     }
+
+    private void swapZeroRoot(TreeNode treeNodeA, TreeNode treeNodeB, ChoiceNode parentNodeA, ChoiceNode parentNodeB) {
+        int posA = parentNodeA.indexOfChild(treeNodeA);
+        int posB = parentNodeB.indexOfChild(treeNodeB);
+        Tree newTreeA = treeNodeA.detachFromTree();
+        Tree newTreeB = treeNodeB.detachFromTree();
+        parentNodeB.addChild(newTreeA.getRoot(), posB);
+        parentNodeA.addChild(newTreeB.getRoot(), posA);
+    }
+
+    private void swapOneRoot(TreeNode treeNodeA, TreeNode treeNodeB, Tree treeB, int treeIndexB, ChoiceNode parentNodeA) {
+        removeTree(treeB);
+        int posA = parentNodeA.indexOfChild(treeNodeA);
+        Tree tree = treeNodeA.detachFromTree();
+        trees.add(treeIndexB, tree);
+        parentNodeA.addChild(treeNodeB, posA);
+    }
+
+    private void swapTwoRoot(Tree treeA, Tree treeB, int treeIndexA, int treeIndexB) {
+        if (treeIndexA < treeIndexB) {
+            trees.remove(treeIndexB);
+            trees.remove(treeIndexA);
+            trees.add(treeIndexA, treeB);
+            trees.add(treeIndexB, treeA);
+        } else {
+            trees.remove(treeIndexA);
+            trees.remove(treeIndexB);
+            trees.add(treeIndexB, treeA);
+            trees.add(treeIndexA, treeB);
+        }
+    }
+
 
     public void setDragAndDropOperation(@Nonnull DragAndDropOperation dragAndDropOperation) {
         this.dragAndDropOperation = dragAndDropOperation;

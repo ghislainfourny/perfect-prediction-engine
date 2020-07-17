@@ -1,9 +1,13 @@
 package ch.ethz.gametheory.gamecreator.visual;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class Arrow extends Group {
 
@@ -111,4 +115,39 @@ public class Arrow extends Group {
     public double getEndY() {
         return line.getEndY();
     }
+
+    public void cutArrow(@Nonnull TreeNodeShape<?, ?> originNode, @Nullable TreeNodeShape<?, ?> targetNode) {
+        Point2D startPoint = originNode.getCenter();
+        startPoint = getParent().sceneToLocal(originNode.localToScene(startPoint));
+        Point2D endPoint;
+
+        if (targetNode != null) {
+            endPoint = targetNode.getCenter();
+            endPoint = getParent().sceneToLocal(targetNode.localToScene(endPoint));
+        } else {
+            endPoint = new Point2D(getEndX(), getEndY());
+        }
+
+        double sx = startPoint.getX();
+        double sy = startPoint.getY();
+        double ex = endPoint.getX();
+        double ey = endPoint.getY();
+
+        double direction = (ex - sx) / (ey - sy);
+        double distance = originNode.centerToBorderDistance(Math.abs((endPoint.getY() - startPoint.getY()) / (endPoint.getX() - startPoint.getX())));
+
+        setStartPoint(
+                sx + Math.signum(ex - sx) * Math.sqrt((Math.pow(distance, 2) / (1 + Math.pow(1 / direction, 2)))),
+                sy + Math.signum(ey - sy) * Math.sqrt((Math.pow(distance, 2) / (1 + Math.pow(direction, 2))))
+        );
+
+        if (targetNode != null) {
+            distance = targetNode.centerToBorderDistance(Math.abs((endPoint.getY() - startPoint.getY()) / (endPoint.getX() - startPoint.getX())));
+            setEndPoint(
+                    ex + Math.signum(sx - ex) * Math.sqrt((Math.pow(distance, 2) / (1 + Math.pow(1 / direction, 2)))),
+                    ey + Math.signum(sy - ey) * Math.sqrt((Math.pow(distance, 2) / (1 + Math.pow(direction, 2))))
+            );
+        }
+    }
+
 }

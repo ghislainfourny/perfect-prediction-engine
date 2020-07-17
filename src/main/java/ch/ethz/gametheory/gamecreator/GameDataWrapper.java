@@ -14,7 +14,6 @@ public class GameDataWrapper {
 
     private List<PlayerXML> players;
     private List<InformationSetXML> informationSets;
-    private TreeXML mainTree;
     private List<TreeXML> components;
 
     @XmlElementWrapper(name = "players")
@@ -35,15 +34,6 @@ public class GameDataWrapper {
 
     public void setInformationSets(List<InformationSetXML> informationSets) {
         this.informationSets = informationSets;
-    }
-
-    @XmlElement(name = "maintree")
-    public TreeXML getMainTree() {
-        return mainTree;
-    }
-
-    public void setMainTree(TreeXML mainTree) {
-        this.mainTree = mainTree;
     }
 
     @XmlElementWrapper(name = "components")

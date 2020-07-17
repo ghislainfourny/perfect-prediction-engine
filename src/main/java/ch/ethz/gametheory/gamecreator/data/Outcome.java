@@ -2,6 +2,7 @@ package ch.ethz.gametheory.gamecreator.data;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import javax.annotation.Nonnull;
@@ -21,12 +22,22 @@ public class Outcome extends TreeNode {
         super();
         this.outcomeNumbers = new HashMap<>();
         this.players = players;
+        players.addListener((ListChangeListener<Player>) c -> {
+            while (c.next()) {
+                c.getRemoved().forEach(outcomeNumbers::remove);
+                setOutputText();
+            }
+        });
     }
 
     private IntegerProperty getPlayerOutcomeProperty(Player player) {
         if (!outcomeNumbers.containsKey(player)) {
             IntegerProperty t = new SimpleIntegerProperty(0);
-            t.addListener(((observableValue, number, t1) -> toggleChanged()));
+            t.addListener(((observableValue, number, t1) -> {
+                setOutputText();
+                toggleChanged();
+            }
+            ));
             toggleChanged();
             outcomeNumbers.put(player, t);
         }
@@ -84,7 +95,7 @@ public class Outcome extends TreeNode {
         return new LinkedList<>();
     }
 
-    private void setOutputText() {
+    public void setOutputText() {
         if (!this.players.isEmpty()) {
             StringBuilder s = new StringBuilder();
             for (Player p : players) {

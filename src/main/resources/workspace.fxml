@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import ch.ethz.gametheory.gamecreator.visual.NotificationBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.172-ea"
+      fx:controller="ch.ethz.gametheory.gamecreator.controllers.WorkspaceController">
+    <HBox spacing="10.0">
+        <opaqueInsets>
+            <Insets/>
+        </opaqueInsets>
+        <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </padding>
+        <Button fx:id="buttonRotateClockwise" mnemonicParsing="false" onAction="#rotateClockwise">
+            <tooltip>
+                <Tooltip text="Rotate Clockwise"/>
+            </tooltip>
+        </Button>
+        <Button fx:id="buttonRotateAnticlockwise" mnemonicParsing="false" onAction="#rotateAnticlockwise">
+            <tooltip>
+                <Tooltip text="Rotate Anticlockwise"/>
+            </tooltip>
+        </Button>
+        <Separator orientation="VERTICAL"/>
+        <ToggleButton fx:id="toggleToolConnect" mnemonicParsing="false" onAction="#toggleConnecting"
+                      text=" Connect Nodes">
+            <tooltip>
+                <Tooltip text="Connect Nodes"/>
+            </tooltip>
+        </ToggleButton>
+        <ToggleButton fx:id="toggleToolSwap" mnemonicParsing="false" onAction="#toggleMove" text=" Swap Subtrees">
+            <tooltip>
+                <Tooltip text="Swap Nodes"/>
+            </tooltip>
+        </ToggleButton>
+        <Separator orientation="VERTICAL"/>
+        <CheckBox fx:id="checkBoxShowPlayers" mnemonicParsing="false" selected="true" text="Show Players"/>
+        <CheckBox fx:id="checkBoxShowPayouts" mnemonicParsing="false" selected="true" text="Show Outcomes"/>
+        <Separator orientation="VERTICAL"/>
+        <Button fx:id="btnCheckConstraints" mnemonicParsing="false" onAction="#checkConstraints"
+                text="Check Constraints"/>
+        <Button fx:id="btnSolve" mnemonicParsing="false" onAction="#solve" text="Solve"/>
+    </HBox>
+    <StackPane fx:id="stackPane" alignment="TOP_LEFT" VBox.vgrow="ALWAYS">
+        <ScrollPane fitToHeight="true" fitToWidth="true">
+            <VBox alignment="TOP_CENTER">
+                <NotificationBox fx:id="notificationBox"/>
+                <fx:include fx:id="forest" source="forest.fxml" HBox.hgrow="ALWAYS" alignment="TOP_CENTER"
+                            VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </ScrollPane>
+        <Pane fx:id="topPane" mouseTransparent="true"/>
+    </StackPane>
+</VBox>

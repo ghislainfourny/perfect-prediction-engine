@@ -1,6 +1,7 @@
 package ch.ethz.gametheory.gamecreator.controllers;
 
 import ch.ethz.gametheory.gamecreator.GUI;
+import ch.ethz.gametheory.gamecreator.data.ModelIO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -13,33 +14,39 @@ import java.util.prefs.Preferences;
 
 public class MenuController {
 
-    private MainController mainController;
-    private File mostRecentSavedFile;
+    private Stage stage;
+    private ModelIO modelIO;
 
     @FXML
     public void saveAsWorkspace() {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
-        fileChooser.getExtensionFilters().add(extensionFilter);
-        File file = fileChooser.showSaveDialog(mainController.getStage());
+        FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        FileChooser.ExtensionFilter jsonFilter = new FileChooser.ExtensionFilter("Json files (*.json", "*.json");
+        fileChooser.getExtensionFilters().addAll(xmlFilter, jsonFilter);
+        File file = fileChooser.showSaveDialog(stage);
 
         if (file != null) {
-            if (!file.getPath().endsWith(".xml")) {
-                file = new File(file.getPath() + ".xml");
-            }
-            mainController.getStage().setTitle("Game Tree Builder - " + file.getName());
+            stage.setTitle("Game Tree Builder - " + file.getName());
             Preferences.userNodeForPackage(GUI.class).put("filePath", file.getPath());
-            this.mainController.saveState(file);
-            this.mostRecentSavedFile = file;
+
+            FileChooser.ExtensionFilter selectedExtensionFilter = fileChooser.getSelectedExtensionFilter();
+            if (xmlFilter.equals(selectedExtensionFilter)) {
+                modelIO.saveAsXml(file);
+            } else if (jsonFilter.equals(selectedExtensionFilter)) {
+                modelIO.saveAsJson(file);
+            }
+
+            modelIO.setMostRecentSavedFile(file);
         }
     }
 
     @FXML
     public void saveWorkspace() {
-        if (mostRecentSavedFile == null)
+        if (modelIO.getMostRecentSavedFile() == null) {
             saveAsWorkspace();
-        else
-            this.mainController.saveState(mostRecentSavedFile);
+        } else {
+            modelIO.saveAsXml(modelIO.getMostRecentSavedFile());
+        }
     }
 
     @FXML
@@ -47,7 +54,7 @@ public class MenuController {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extensionFilter);
-        File file = fileChooser.showOpenDialog(mainController.getStage());
+        File file = fileChooser.showOpenDialog(stage);
 
         if (file != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -70,16 +77,13 @@ public class MenuController {
         return newInstance;
     }
 
-    void init(MainController mainController) {
-        this.mainController = mainController;
-    }
-
-    public void setMostRecentSavedFile(File mostRecentSavedFile) {
-        this.mostRecentSavedFile = mostRecentSavedFile;
+    void init(Stage stage, ModelIO modelIO) {
+        this.stage = stage;
+        this.modelIO = modelIO;
     }
 
     @FXML
     public void closeApplication() {
-        mainController.getStage().close();
+        stage.close();
     }
 }

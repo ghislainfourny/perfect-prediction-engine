@@ -97,11 +97,9 @@ public class ChoiceNode extends TreeNode {
 
     public List<Tree> deleteNode() {
         final List<Tree> childrenTrees = new LinkedList<>();
-        for (int i = 0; i < children.size(); i++) {
-            TreeNode treeNode = children.get(i);
-            Tree tree = detachFromTree();
+        while (!children.isEmpty()) {
+            Tree tree = children.get(0).detachFromTree();
             childrenTrees.add(tree);
-            removeChild(treeNode);
         }
         ChoiceNode parentNode = getParentNode();
         if (parentNode != null) {

@@ -13,7 +13,6 @@ public class OutcomeShape extends TreeNodeShape<Rectangle, Outcome> {
     private static final int OUTCOME_HEIGHT = 60;
     private static final int OUTCOME_WIDTH = 60;
 
-    private double minWidth = 0.0;
     private final DoubleProperty centerXProperty;
     private final DoubleProperty centerYProperty;
 
@@ -38,6 +37,7 @@ public class OutcomeShape extends TreeNodeShape<Rectangle, Outcome> {
         getLabel().visibleProperty().addListener((observableValue, aBoolean, t1) -> {
             if (observableValue.getValue()) {
                 playerOutcomes.textProperty().bind(getData().getOutputText());
+                setMinWidth(true);
             } else {
                 playerOutcomes.textProperty().unbind();
                 playerOutcomes.setText("");
@@ -50,6 +50,9 @@ public class OutcomeShape extends TreeNodeShape<Rectangle, Outcome> {
             setSelected(false);
             getShape().setStroke(observableValue.getValue() ? SOLUTION_STROKE_COLOR : DEFAULT_STROKE_COLOR);
         });
+        getData().setOutputText();
+        getData().getOutputText().addListener((observable, oldValue, newValue) -> setMinWidth(getLabel().isVisible()));
+        setMinWidth(getLabel().isVisible());
     }
 
     public double getCenterX() {
@@ -61,14 +64,14 @@ public class OutcomeShape extends TreeNodeShape<Rectangle, Outcome> {
     }
 
     private void setMinWidth(boolean isShown) {
+        double minWidth = 0.0;
         if (isShown) {
             Text t = new Text(getLabel().getText());
-            t.setFont(getLabel().getFont());
             double INSET = 5.0;
             double width = t.getBoundsInLocal().getWidth() + 2 * INSET;
-            getLabel().setPrefWidth(Double.max(this.minWidth, width));
+            getLabel().setPrefWidth(Double.max(minWidth, width));
         } else {
-            getLabel().setPrefWidth(this.minWidth);
+            getLabel().setPrefWidth(minWidth);
         }
     }
 

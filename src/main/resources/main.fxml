@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <VBox id="Root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500" prefWidth="800" stylesheets="@material-fx-v0_3.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ethz.gametheory.gamecreator.controllers.MainController">
   <fx:include fx:id="menu" source="menu.fxml" />
   <TabPane fx:id="mainTabPane" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
     <Tab closable="false" text="Game Tree">
       <HBox VBox.vgrow="ALWAYS">
         <fx:include fx:id="sidePane" source="sidepane.fxml" />
-        <fx:include fx:id="forest" source="forest.fxml" HBox.hgrow="ALWAYS" />
+        <fx:include fx:id="workspace" source="workspace.fxml" HBox.hgrow="ALWAYS"/>
       </HBox>
     </Tab>
     <Tab closable="false" text="Minkowski spacetime"/>

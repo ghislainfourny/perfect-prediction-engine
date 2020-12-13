@@ -1,4 +1,7 @@
-import ch.ethz.gametheory.ptesolver.*;
+import ch.ethz.gametheory.ptesolver.GameFactory;
+import ch.ethz.gametheory.ptesolver.GameWithImperfectInformation;
+import ch.ethz.gametheory.ptesolver.NaiveGameFactory;
+import ch.ethz.gametheory.ptesolver.PTESolver;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -17,18 +20,18 @@ public class EFTests {
 
 
     int[] pdpTOdpMap;
-    int[] dpTOplayerMap;
+    int[] dpToPlayerMap;
     int[][] partialActions;
-    int[][] outcomes;
-    int[][] expectedResult;
+    Integer[][] outcomes;
+    Integer[][] expectedResult;
 
     public EFTests(int[] pdpTOdpMap,
-                   int[] dpTOplayerMap,
+                   int[] dpToPlayerMap,
                    int[][] partialActions,
-                   int[][] outcomes,
-                   int[][] expectedResult){
+                   Integer[][] outcomes,
+                   Integer[][] expectedResult) {
         this.pdpTOdpMap = pdpTOdpMap;
-        this.dpTOplayerMap = dpTOplayerMap;
+        this.dpToPlayerMap = dpToPlayerMap;
         this.partialActions = partialActions;
         this.outcomes = outcomes;
         this.expectedResult = expectedResult;
@@ -39,7 +42,7 @@ public class EFTests {
 
         File file = new File("src/test/resources/eftestdata.txt");
         Scanner scanner = new Scanner(file);
-        Queue<Object[]> tests = new LinkedList();
+        Queue<Object[]> tests = new LinkedList<>();
 
         while (scanner.hasNextLine()){
             String temp = scanner.nextLine();
@@ -116,7 +119,7 @@ public class EFTests {
         int[] pdpToDp = new int[pdpToDpMap.size()];
         int[] dpToPlayer = new int[dpToPlayerMap.size()];
         int[][] pa = new int[partialAction.size()][3];
-        int[][] out = new int[outcomes.size()][2];
+        Integer[][] out = new Integer[outcomes.size()][2];
 
         for (int i = 0; i < pdpToDp.length; i++)
             pdpToDp[i] = pdpToDpMap.poll();
@@ -145,7 +148,7 @@ public class EFTests {
             currentNode = pa[actionPos][2];
         }
 
-        int[][] exp = {out[currentNode-pdpToDp.length]};
+        Integer[][] exp = {out[currentNode - pdpToDp.length]};
 
         return new Object[]{pdpToDp, dpToPlayer, pa, out, exp};
 
@@ -155,13 +158,13 @@ public class EFTests {
 
     @Test
     public void testEFGames() {
-        GameFactory factory = new NaiveGameFactory();
+        GameFactory<Integer> factory = new NaiveGameFactory<>(Integer.class);
 
         try {
-            factory.parseData(pdpTOdpMap, dpTOplayerMap, partialActions,outcomes);
-            GameWithImperfectInformation game = factory.createGame();
-            PTESolver solver = new PTESolver(game);
-            int[][] result = solver.solve();
+            factory.parseData(pdpTOdpMap, dpToPlayerMap, partialActions, outcomes);
+            GameWithImperfectInformation<Integer> game = factory.createGame();
+            PTESolver<Integer> solver = new PTESolver<>(game, Integer.class);
+            Integer[][] result = solver.solve();
             assertArrayEquals(expectedResult, result);
         } catch (IllegalAccessException e) {
             e.printStackTrace();

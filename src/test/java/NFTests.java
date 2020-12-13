@@ -1,5 +1,7 @@
-import ch.ethz.gametheory.ptesolver.*;
-
+import ch.ethz.gametheory.ptesolver.GameFactory;
+import ch.ethz.gametheory.ptesolver.GameWithImperfectInformation;
+import ch.ethz.gametheory.ptesolver.NaiveGameFactory;
+import ch.ethz.gametheory.ptesolver.PTESolver;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -9,7 +11,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.io.File;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 
 import static org.junit.Assert.assertArrayEquals;
 
@@ -18,18 +22,18 @@ public class NFTests {
 
 
     int[] pdpTOdpMap;
-    int[] dpTOplayerMap;
+    int[] dpToPlayerMap;
     int[][] partialActions;
-    int[][] outcomes;
-    int[][] expectedResult;
+    Integer[][] outcomes;
+    Integer[][] expectedResult;
 
     public NFTests(int[] pdpTOdpMap,
-                   int[] dpTOplayerMap,
+                   int[] dpToPlayerMap,
                    int[][] partialActions,
-                   int[][] outcomes,
-                   int[][] expectedResult){
+                   Integer[][] outcomes,
+                   Integer[][] expectedResult) {
         this.pdpTOdpMap = pdpTOdpMap;
-        this.dpTOplayerMap = dpTOplayerMap;
+        this.dpToPlayerMap = dpToPlayerMap;
         this.partialActions = partialActions;
         this.outcomes = outcomes;
         this.expectedResult = expectedResult;
@@ -40,7 +44,7 @@ public class NFTests {
 
         File file = new File("src/test/resources/nftestdata.txt");
         Scanner scanner = new Scanner(file);
-        Queue<Object[]> tests = new LinkedList();
+        Queue<Object[]> tests = new LinkedList<>();
 
         while (scanner.hasNextLine()){
             String temp = scanner.nextLine();
@@ -69,18 +73,18 @@ public class NFTests {
         JsonElement json_y = object.get("y");
 
         int java_z = gson.fromJson(json_z, int.class);
-        int[][] java_p = gson.fromJson(json_P, int[][].class);
-        int[][][] java_y = gson.fromJson(json_y, int[][][].class);
+        Integer[][] java_p = gson.fromJson(json_P, Integer[][].class);
+        Integer[][][] java_y = gson.fromJson(json_y, Integer[][][].class);
 
-        int[][] expectedResult = new int[java_p.length][java_z];
+        Integer[][] expectedResult = new Integer[java_p.length][java_z];
         for (int i = 0; i < java_p.length; i++) {
             expectedResult[i] = java_y[java_p[i][0]][java_p[i][1]];
         }
 
-        int[] pdpToDpMap = {0,1,1,1};
-        int[] dpToPlayerMap = {0,1};
+        int[] pdpToDpMap = {0, 1, 1, 1};
+        int[] dpToPlayerMap = {0, 1};
         int[][] partialActions = new int[12][3];
-        int[][] outcomes = new int[9][2];
+        Integer[][] outcomes = new Integer[9][2];
         partialActions[0][0] = 0;
         partialActions[1][0] = 1;
         partialActions[2][0] = 2;
@@ -106,13 +110,13 @@ public class NFTests {
 
     @Test
     public void testNFGames() {
-        GameFactory factory = new NaiveGameFactory();
+        GameFactory<Integer> factory = new NaiveGameFactory<>(Integer.class);
 
         try {
-            factory.parseData(pdpTOdpMap, dpTOplayerMap, partialActions,outcomes);
-            GameWithImperfectInformation game = factory.createGame();
-            PTESolver solver = new PTESolver(game);
-            int[][] result = solver.solve();
+            factory.parseData(pdpTOdpMap, dpToPlayerMap, partialActions, outcomes);
+            GameWithImperfectInformation<Integer> game = factory.createGame();
+            PTESolver<Integer> solver = new PTESolver<>(game, Integer.class);
+            Integer[][] result = solver.solve();
             assertArrayEquals(expectedResult, result);
         } catch (IllegalAccessException e) {
             e.printStackTrace();

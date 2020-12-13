@@ -1,18 +1,18 @@
 package ch.ethz.gametheory.ptesolver;
 
-public class GameWithImperfectInformation {
+public class GameWithImperfectInformation<T extends Comparable<T>> {
 
-    private DependencyStructure ds;
-    private MaximinStructure ms;
-    private OutcomeStructure os;
-    private String[] playerNames;
-    private String[] strategyNames;
+    private final DependencyStructure ds;
+    private final MaximinStructure<T> ms;
+    private final OutcomeStructure<T> os;
+    private final String[] playerNames;
+    private final String[] strategyNames;
 
     GameWithImperfectInformation(DependencyStructure ds,
-                                 MaximinStructure ms,
-                                 OutcomeStructure os,
+                                 MaximinStructure<T> ms,
+                                 OutcomeStructure<T> os,
                                  String[] playerNames,
-                                 String[] strategyNames){
+                                 String[] strategyNames) {
         this.ds = ds;
         this.ms = ms;
         this.os = os;
@@ -25,11 +25,11 @@ public class GameWithImperfectInformation {
         return ds;
     }
 
-    public MaximinStructure getMaximinStructure() {
+    public MaximinStructure<T> getMaximinStructure() {
         return ms;
     }
 
-    public OutcomeStructure getOutcomeStructure() {
+    public OutcomeStructure<T> getOutcomeStructure() {
         return os;
     }
 

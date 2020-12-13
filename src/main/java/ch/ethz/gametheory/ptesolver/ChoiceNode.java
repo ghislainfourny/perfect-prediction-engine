@@ -1,39 +1,45 @@
 package ch.ethz.gametheory.ptesolver;
 
-class ChoiceNode implements Node {
-    private Edge[] actions; // (sorted) array of edges
+class ChoiceNode<T extends Comparable<T>> implements Node<T> {
+
+    private final Class<T> clazz;
+    private Edge<T>[] actions; // (sorted) array of edges
     private int nOutcomes; // number of not eliminated outcomes
 
-    public void setActions(Edge[] actions) {
-        this.actions = actions;
+    ChoiceNode(final Class<T> clazz) {
+        this.clazz = clazz;
     }
 
-    public Edge[] getActions() {
+    public Edge<T>[] getActions() {
         return actions;
     }
 
-    public int initializeNumberOfOutcomes(){
+    public void setActions(Edge<T>[] actions) {
+        this.actions = actions;
+    }
+
+    public int initializeNumberOfOutcomes() {
         nOutcomes = 0;
-        for (Edge e: actions) {
+        for (Edge<T> e : actions) {
             nOutcomes += e.initializeNumberOfOutcomes();
         }
         return nOutcomes;
     }
 
-    public int getNumberOfOutcomes(){
+    public int getNumberOfOutcomes() {
         return nOutcomes;
     }
 
-    public int[][] getRemainingOutcomes() {
-        int[][] result = null;
+    public T[][] getRemainingOutcomes() {
+        T[][] result = null;
         if (nOutcomes != 0) {
-            int[][] out = new int[nOutcomes][];
+            T[][] out = GenericUtils.getMatrix(clazz, nOutcomes);
             int index = 0;
             // check for all edges if there are remaining outcomes; if there are, get all of them
-            for (Edge e : actions) {
+            for (Edge<T> e : actions) {
                 int n = e.getNumberOfOutcomes();
                 if (n > 0)
-                    for (int[] i : e.getRemainingOutcomes()) {
+                    for (T[] i : e.getRemainingOutcomes()) {
                         out[index++] = i;
                     }
             }
@@ -42,25 +48,27 @@ class ChoiceNode implements Node {
         return result;
     }
 
-    public int eliminateOutcomes(int[] maximinValues){
-        if (nOutcomes==0) return 0; 
+    public int eliminateOutcomes(T[] maximinValues) {
+        if (nOutcomes == 0) return 0;
         int eliminated = 0;
-        for (Edge e: actions) eliminated += e.eliminateOutcomes(maximinValues);
+        for (Edge<T> e : actions) {
+            eliminated += e.eliminateOutcomes(maximinValues);
+        }
         nOutcomes -= eliminated;
         return eliminated;
     }
 
-    public Integer[] getMin(int playerNum) {
-        Integer[] min = new Integer[actions.length];
-        for (int i = 0; i < actions.length; i++){
+    public T[] getMin(int playerNum) {
+        T[] min = GenericUtils.getGenericArray(clazz, actions.length);
+        for (int i = 0; i < actions.length; i++) {
             min[i] = actions[i].getMin(playerNum);
         }
         return min;
     }
 
-    public boolean isParetoOptimal(int[] values){
+    public boolean isParetoOptimal(T[] values) {
         boolean isParetoOptimal = true;
-        for (Edge e : actions){
+        for (Edge<T> e : actions) {
             isParetoOptimal &= e.isParetoOptimal(values);
         }
         return isParetoOptimal;

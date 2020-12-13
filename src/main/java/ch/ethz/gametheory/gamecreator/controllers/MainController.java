@@ -1,9 +1,14 @@
 package ch.ethz.gametheory.gamecreator.controllers;
 
 import ch.ethz.gametheory.gamecreator.*;
-import ch.ethz.gametheory.gamecreator.Outcome;
-import ch.ethz.gametheory.gamecreator.xmlhelper.*;
-import ch.ethz.gametheory.ptesolver.*;
+import ch.ethz.gametheory.gamecreator.xmlhelper.ChoiceNodeXML;
+import ch.ethz.gametheory.gamecreator.xmlhelper.InformationSetXML;
+import ch.ethz.gametheory.gamecreator.xmlhelper.PlayerXML;
+import ch.ethz.gametheory.gamecreator.xmlhelper.TreeXML;
+import ch.ethz.gametheory.ptesolver.GameFactory;
+import ch.ethz.gametheory.ptesolver.GameWithImperfectInformation;
+import ch.ethz.gametheory.ptesolver.NaiveGameFactory;
+import ch.ethz.gametheory.ptesolver.PTESolver;
 import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -134,12 +139,12 @@ public class MainController implements Initializable {
             primitivePartialActions[i][2]=temp[2];
         }
 
-        int[][] primitiveOutcomes = new int[outcomes.size()][numOfPlayers];
+        Integer[][] primitiveOutcomes = new Integer[outcomes.size()][numOfPlayers];
         for (int i = 0; i < primitiveOutcomes.length; i++)
                 for (int j = 0; j < primitiveOutcomes[i].length; j++)
                     primitiveOutcomes[i][j] = outcomes.get(i)[j];
 
-        GameFactory gameFactory = new NaiveGameFactory();
+        GameFactory<Integer> gameFactory = new NaiveGameFactory<>(Integer.class);
         try {
             gameFactory.parseData(
                     primitiveChoiceNodeToInformationset,
@@ -147,9 +152,9 @@ public class MainController implements Initializable {
                     primitivePartialActions,
                     primitiveOutcomes
             );
-            GameWithImperfectInformation game = gameFactory.createGame();
-            PTESolver gameSolver = new PTESolver(game);
-            int[][] solutions = gameSolver.solve();
+            GameWithImperfectInformation<Integer> game = gameFactory.createGame();
+            PTESolver<Integer> gameSolver = new PTESolver<>(game, Integer.class);
+            Integer[][] solutions = gameSolver.solve();
             Player[] players = new Player[playerToNum.size()];
             playerToNum.forEach((player, integer) -> players[integer] = player);
             mainTree.setSolution(solutions, players);

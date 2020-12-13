@@ -1,6 +1,6 @@
 package ch.ethz.gametheory.ptesolver;
 
-public interface Node {
+public interface Node<T extends Comparable<T>> {
 
     /**
      * @return used by the constructor to initialize how many outcomes one node has as children (or is itself)
@@ -15,25 +15,25 @@ public interface Node {
     /**
      * @return if an outcome was not eliminated via eliminateOutcomes it will return here; if there's none, returns null
      */
-    int[][] getRemainingOutcomes();
+    T[][] getRemainingOutcomes();
 
     /**
-     * @param maximinValues expects one maximin value for each player; if a player didn't have an informationset
+     * @param maximinValues expects one maximin value for each player; if a player didn't have an information set
      *                      activated this round the value should be Integer.MIN_VALUE
      * @return the amount of outcomes that were eliminated in this elimination step
      */
-    int eliminateOutcomes(int[] maximinValues);
+    int eliminateOutcomes(T[] maximinValues);
 
     /**
      * @param playerNum whose min value should be returned
      * @return index i is the min value of the i-th edge (sorted) of this node;
      * null if all edges are impossible (all children are eliminated)
      */
-    Integer[] getMin(int playerNum);
+    T[] getMin(int playerNum);
 
     /**
      * @param values array with the length of numbers of players
      * @return true if none of the outcomes in this subtree pareto dominate values
      */
-    boolean isParetoOptimal(int[] values);
+    boolean isParetoOptimal(T[] values);
 }

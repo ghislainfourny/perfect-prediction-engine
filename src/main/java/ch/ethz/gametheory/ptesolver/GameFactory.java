@@ -1,8 +1,11 @@
 package ch.ethz.gametheory.ptesolver;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
 
-public abstract class GameFactory {
+public abstract class GameFactory<T extends Comparable<T>> {
 
     protected final static int ROOT = 0;
     protected final static int PA_ACTION_NUM_INDEX = 0;
@@ -12,7 +15,7 @@ public abstract class GameFactory {
     protected int[] choiceNodeToInformationSetMap;
     protected int[] informationSetToPlayerMap;
     protected int[][] partialActions;
-    protected int[][] outcomes;
+    protected T[][] outcomes;
     protected String[] playerNames;
     protected String[] actionNames;
 
@@ -20,14 +23,14 @@ public abstract class GameFactory {
      * @return a game with imperfect information wit DependencyStructure, MaximinStructure and OutcomeStructure
      * @throws IllegalAccessException if parseData was not called successfully first
      */
-    abstract public GameWithImperfectInformation createGame() throws IllegalAccessException;
+    abstract public GameWithImperfectInformation<T> createGame() throws IllegalAccessException;
 
     /**
      * see other parseData method
      */
     public void parseData(int[] choiceNodeToInformationSetMap, int[] informationSetToPlayerMap,
-                          int[][] partialActions, int[][] outcomes) throws IllegalArgumentException {
-        parseData(choiceNodeToInformationSetMap, informationSetToPlayerMap, partialActions, outcomes,null,null);
+                          int[][] partialActions, T[][] outcomes) throws IllegalArgumentException {
+        parseData(choiceNodeToInformationSetMap, informationSetToPlayerMap, partialActions, outcomes, null, null);
     }
 
     /**
@@ -48,8 +51,8 @@ public abstract class GameFactory {
      * @throws IllegalArgumentException if the input is not in canonical form or partial actions are not given in the
      *                                  correct order
      */
-    public void parseData(int[] choiceNodeToInformationSetMap,int[] informationSetToPlayerMap,
-                          int[][] partialActions, int[][] outcomes,
+    public void parseData(int[] choiceNodeToInformationSetMap, int[] informationSetToPlayerMap,
+                          int[][] partialActions, T[][] outcomes,
                           String[] playerNames, String[] strategyNames) throws IllegalArgumentException {
         this.choiceNodeToInformationSetMap = choiceNodeToInformationSetMap;
         this.informationSetToPlayerMap = informationSetToPlayerMap;
@@ -199,7 +202,7 @@ public abstract class GameFactory {
 
         int n_N = outcomes[0].length;
 
-        for (int[] o : outcomes){
+        for (T[] o : outcomes) {
             if (o.length != n_N)
                 cleanUp("Not all outcomes have the same amount of payouts!");
         }

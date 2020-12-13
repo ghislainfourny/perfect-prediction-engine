@@ -1,7 +1,5 @@
-import ch.ethz.gametheory.ptesolver.GameFactory;
-import ch.ethz.gametheory.ptesolver.GameWithImperfectInformation;
-import ch.ethz.gametheory.ptesolver.NaiveGameFactory;
-import ch.ethz.gametheory.ptesolver.PTESolver;
+package ch.ethz.gametheory.ptesolver;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

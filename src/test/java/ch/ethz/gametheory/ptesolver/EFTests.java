@@ -1,7 +1,5 @@
-import ch.ethz.gametheory.ptesolver.GameFactory;
-import ch.ethz.gametheory.ptesolver.GameWithImperfectInformation;
-import ch.ethz.gametheory.ptesolver.NaiveGameFactory;
-import ch.ethz.gametheory.ptesolver.PTESolver;
+package ch.ethz.gametheory.ptesolver;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

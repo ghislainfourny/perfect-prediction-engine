@@ -1,0 +1,49 @@
+{
+  "kind": "choice",
+  "player": 1,
+  "information-set": 1,
+  "children": [
+    {
+      "kind": "choice",
+      "player": 2,
+      "information-set": 2,
+      "children": [
+        {
+          "kind": "outcome",
+          "payoffs": [
+            1,
+            1
+          ]
+        },
+        {
+          "kind": "outcome",
+          "payoffs": [
+            3,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "choice",
+      "player": 2,
+      "information-set": 2,
+      "children": [
+        {
+          "kind": "outcome",
+          "payoffs": [
+            0,
+            3
+          ]
+        },
+        {
+          "kind": "outcome",
+          "payoffs": [
+            2,
+            2
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,7 +1,5 @@
-import ch.ethz.gametheory.ptesolver.GameFactory;
-import ch.ethz.gametheory.ptesolver.GameWithImperfectInformation;
-import ch.ethz.gametheory.ptesolver.NaiveGameFactory;
-import ch.ethz.gametheory.ptesolver.PTESolver;
+package ch.ethz.gametheory.ptesolver;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -46,7 +44,7 @@ public class NFTests {
         Scanner scanner = new Scanner(file);
         Queue<Object[]> tests = new LinkedList<>();
 
-        while (scanner.hasNextLine()){
+        while (scanner.hasNextLine()) {
             String temp = scanner.nextLine();
             Object[] elem = getTestData(temp);
             tests.add(elem);
@@ -97,15 +95,15 @@ public class NFTests {
 
         for (int i = 0; i < java_y.length; i++) {
             for (int j = 0; j < java_y[i].length; j++) {
-                int index = i*java_y.length+j;
+                int index = i * java_y.length + j;
                 outcomes[index] = java_y[i][j];
-                partialActions[index+3][0] = j+3;
-                partialActions[index+3][1] = i+1;
-                partialActions[index+3][2] = index+4;
+                partialActions[index + 3][0] = j + 3;
+                partialActions[index + 3][1] = i + 1;
+                partialActions[index + 3][2] = index + 4;
             }
         }
 
-        return new Object[] {pdpToDpMap, dpToPlayerMap, partialActions, outcomes, expectedResult};
+        return new Object[]{pdpToDpMap, dpToPlayerMap, partialActions, outcomes, expectedResult};
     }
 
     @Test

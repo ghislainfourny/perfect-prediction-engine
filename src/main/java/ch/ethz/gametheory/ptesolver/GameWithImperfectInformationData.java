@@ -1,6 +1,6 @@
 package ch.ethz.gametheory.ptesolver;
 
-public interface GameWithImperfectInformationData {
+public interface GameWithImperfectInformationData<T extends Comparable<T>> {
 
     int[] getChoiceNodeToInformationSetMap();
 
@@ -8,10 +8,6 @@ public interface GameWithImperfectInformationData {
 
     int[][] getPartialActions();
 
-    Integer[][] getOutcomes();
-
-    String[] getPlayerNames();
-
-    String[] getActionNames();
+    T[][] getOutcomes();
 
 }

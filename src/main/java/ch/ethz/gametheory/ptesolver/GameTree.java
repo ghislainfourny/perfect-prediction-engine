@@ -54,7 +54,7 @@ public class GameTree<T extends Comparable<T>> implements MaximinStructure<T>, D
 
     public T[] getMaximin(boolean[] reachedInformationSets) {
         T[] maximinValues = GenericUtils.getGenericArray(clazz, nPlayers); // index i is the maximin value of player i
-        Arrays.fill(maximinValues, Integer.MIN_VALUE);
+        Arrays.fill(maximinValues, null);
         for (int i = 0; i < reachedInformationSets.length; i++) {
             // if a information set is activated, compute maximin of this information set
             if (reachedInformationSets[i] && !informationSet[i].isEmpty()) {

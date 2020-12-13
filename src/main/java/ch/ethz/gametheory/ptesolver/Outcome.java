@@ -31,7 +31,7 @@ public class Outcome<T extends Comparable<T>> implements Node<T> {
         if (nOutcomes == 0) return 0;
         // if one of the maximin values is bigger than its value: eliminate outcome
         for (int i = 0; i < maximinValues.length; i++) {
-            if (outcome[i].compareTo(maximinValues[i]) < 0) {
+            if (maximinValues[i] != null && outcome[i].compareTo(maximinValues[i]) < 0) {
                 nOutcomes = 0;
                 break;
             }

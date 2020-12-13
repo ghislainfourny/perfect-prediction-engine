@@ -3,7 +3,7 @@ package ch.ethz.gametheory.ptesolver;
 public interface OutcomeStructure<T extends Comparable<T>> {
 
     /**
-     * @param maximinValues expects one maximin value for each player; if a player didn't have an informationset
+     * @param maximinValues expects one maximin value for each player; if a player didn't have an information set
      *                      activated this round the value should be Integer.MIN_VALUE
      * @return true if at least one value was eliminated
      */

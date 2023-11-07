@@ -1,0 +1,218 @@
+{
+  "player": 1,
+  "information-set": 1,
+  "children": [
+    {
+      "player": 2,
+      "information-set": 2,
+      "children": [
+        {
+          "player": 3,
+          "information-set": 3,
+          "children": [
+            {
+              "player": 4,
+              "information-set": 5,
+              "children": [
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                },
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                }
+              ]
+            },
+            {
+              "player": 4,
+              "information-set": 5,
+              "children": [
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                },
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "player": 3,
+          "information-set": 3,
+          "children": [
+            {
+              "player": 3,
+              "information-set": 6,
+              "children": [
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                },
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                }
+              ]
+            },
+            {
+              "player": 3,
+              "information-set": 6,
+              "children": [
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                },
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "player": 2,
+      "information-set": 2,
+      "children": [
+        {
+          "player": 3,
+          "information-set": 4,
+          "children": [
+            {
+              "player": 4,
+              "information-set": 5,
+              "children": [
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                },
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                }
+              ]
+            },
+            {
+              "player": 4,
+              "information-set": 5,
+              "children": [
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                },
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "player": 3,
+          "information-set": 4,
+          "children": [
+            {
+              "player": 3,
+              "information-set": 6,
+              "children": [
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                },
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                }
+              ]
+            },
+            {
+              "player": 3,
+              "information-set": 6,
+              "children": [
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                },
+                {
+                  "payoffs": [
+                    1.2,
+                    3.4,
+                    5.6,
+                    7.8
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

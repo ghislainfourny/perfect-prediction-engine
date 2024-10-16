@@ -18,4 +18,4 @@ Solving games with JAVA:
     
 A copy of the games extended with Nash and PTE resolution is in /tmp/labeled/games.
 
-Copyright Ramon Gomm, Ghislain Fourny, Gustavo Alonso, 2019-2020. All rights reserved.
+Copyright Ramon Gomm, Luc Stoffer, Ghislain Fourny 2019-2024. All rights reserved.

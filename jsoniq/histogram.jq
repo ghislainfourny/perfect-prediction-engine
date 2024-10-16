@@ -1,6 +1,6 @@
 declare variable $path as anyURI external := anyURI("/tmp/labeled");
 
-declare	type local:histogram	as { "path" : "string", "position" : "integer", "count" : "integer" };
+declare	type local:histogram as { "path" : "string", "outcome" : "integer", "count" : "integer" };
 
 validate type local:histogram* {
 

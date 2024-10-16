@@ -18,4 +18,9 @@ Solving games with JAVA:
     
 A copy of the games extended with Nash and PTE resolution is in /tmp/labeled/games.
 
+Building the histogram
+
+    cd jsoniq
+    java -jar ../rumbledb-1.21.0-standalone.jar run histogram.jq --output-format csv --number-of-output-partitions 1 --output-format-option:header true --output-path /tmp/histogram --overwrite yes
+
 Copyright Ramon Gomm, Luc Stoffer, Ghislain Fourny 2019-2024. All rights reserved.

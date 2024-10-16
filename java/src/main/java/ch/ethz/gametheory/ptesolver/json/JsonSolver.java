@@ -213,8 +213,8 @@ public class JsonSolver {
         LocalDateTime currentDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String dateTimeString = currentDateTime.format(formatter);
-        String inputPath = System.getenv("OUTPUT_GENERATED");
-        String resultPath = System.getenv("OUTPUT_LABELED");
+        String inputPath = args[0];
+        String resultPath = args[1];
 
         try (JavaSparkContext sc = new JavaSparkContext(conf)) {
    

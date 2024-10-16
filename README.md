@@ -24,5 +24,7 @@ Download the [standalone RumbleDB jar](https://github.com/RumbleDB/rumble/releas
 
     cd jsoniq
     java -jar rumbledb-1.21.0-standalone.jar run histogram.jq --output-format csv --number-of-output-partitions 1 --output-format-option:header true --output-path /tmp/histogram --overwrite yes
+    
+The output csv file will be in /tmp/histogram in a subdirectory.
 
 Copyright Ramon Gomm, Luc Stoffer, Ghislain Fourny 2019-2024. All rights reserved.

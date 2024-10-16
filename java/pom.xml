@@ -14,6 +14,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_2.12</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.12</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.1</version>
@@ -114,7 +124,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ch.ethz.gametheory.gamecreator.App</mainClass>
+                            <mainClass>ch.ethz.gametheory.ptesolver.json.JsonSolver</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -122,6 +132,13 @@
                     </descriptorRefs>
                 </configuration>
                 <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>

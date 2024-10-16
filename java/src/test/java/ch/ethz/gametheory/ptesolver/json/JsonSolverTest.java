@@ -13,7 +13,7 @@ public class JsonSolverTest {
         File file = new File("src/test/resources/json/prisonersdilemma.json");
         try {
             String json = new String(Files.readAllBytes(file.toPath()));
-            String solve = JsonSolver.solveWithIntegers(json);
+            Integer[][] solve = JsonSolver.solveWithIntegers(json).getOutcome();
             System.out.println(solve);
         } catch (IOException | IllegalAccessException e) {
             e.printStackTrace();
@@ -25,7 +25,7 @@ public class JsonSolverTest {
         File file = new File("src/test/resources/json/game-format.json");
         try {
             String json = new String(Files.readAllBytes(file.toPath()));
-            String solve = JsonSolver.solveWithDoubles(json);
+            Double[][] solve = JsonSolver.solveWithDoubles(json).getOutcome();
             System.out.println(solve);
         } catch (IOException | IllegalAccessException e) {
             e.printStackTrace();

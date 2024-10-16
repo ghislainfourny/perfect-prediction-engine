@@ -84,4 +84,30 @@ public class GameTree<T extends Comparable<T>> implements MaximinStructure<T>, D
         return maximinValues;
     }
 
+    public int[] getReachedActions() {
+        int[] actions = new int[informationSet.length];
+        for (int i = 0; i < informationSet.length; i++) {
+            int acc = -1;
+            for (Node<T> n : informationSet[i]) {
+            	int thisAction = n.getOnlyRemainingAction();
+            	if(thisAction == -1)
+            	{
+            		continue;
+            	}
+            	if(acc == -1)
+            	{
+            		acc = thisAction;
+            		continue;
+            	}
+            	if(thisAction != acc)
+            	{
+            		acc = -1;
+            		break;
+            	}
+            }
+            actions[i] = acc;
+        }
+        return actions;
+    }
+
 }

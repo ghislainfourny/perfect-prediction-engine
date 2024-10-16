@@ -154,7 +154,7 @@ public class MainController implements Initializable {
             );
             GameWithImperfectInformation<Integer> game = gameFactory.createGame();
             PTESolver<Integer> gameSolver = new PTESolver<>(game, Integer.class);
-            Integer[][] solutions = gameSolver.solve();
+            Integer[][] solutions = gameSolver.solve().getOutcome();
             Player[] players = new Player[playerToNum.size()];
             playerToNum.forEach((player, integer) -> players[integer] = player);
             mainTree.setSolution(solutions, players);

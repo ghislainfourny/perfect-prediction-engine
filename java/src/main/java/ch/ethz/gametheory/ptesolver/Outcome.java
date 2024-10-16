@@ -54,5 +54,10 @@ public class Outcome<T extends Comparable<T>> implements Node<T> {
         }
         return hasBetterOutcome || isEqual;
     }
+    
+    public int getOnlyRemainingAction()
+    {
+    	return -1;
+    }
 
 }

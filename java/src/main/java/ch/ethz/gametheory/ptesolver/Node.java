@@ -36,4 +36,9 @@ public interface Node<T extends Comparable<T>> {
      * @return true if none of the outcomes in this subtree pareto dominate values
      */
     boolean isParetoOptimal(T[] values);
+    
+    /**
+     * @return the number of the only remaining action, -1 if zero or more than one.
+     */
+    public int getOnlyRemainingAction();
 }

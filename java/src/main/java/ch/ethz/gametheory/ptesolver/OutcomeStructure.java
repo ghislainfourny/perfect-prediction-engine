@@ -13,6 +13,11 @@ public interface OutcomeStructure<T extends Comparable<T>> {
      * @return if a outcome was not eliminated via eliminateOutcomes it will return here; if there's none, returns null
      */
     T[][] getRemainingOutcomes();
+    
+    /**
+     * @return for each information set, the only possible action given eliminated outcomes.
+     */
+    int[] getReachedActions();
 
     /**
      * @param values array with the length of numbers of players

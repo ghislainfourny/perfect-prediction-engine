@@ -6,6 +6,7 @@ public class PTESolver<T extends Comparable<T>> {
     private GameWithImperfectInformation<T> game; // current game
     private boolean solved; // true if game was solved
     private T[][] solution; // contains all solutions after solving
+    private int[] actions; // contains all actions after solving
 
     public PTESolver(GameWithImperfectInformation<T> game, final Class<T> clazz) {
         this.clazz = clazz;
@@ -21,7 +22,7 @@ public class PTESolver<T extends Comparable<T>> {
     /**
      * @return all outcomes which conform to the PTE; empty array if there are none
      */
-    public T[][] solve() {
+    public Solution<T> solve() {
         DependencyStructure ds = game.getDependencyStructure();
         MaximinStructure<T> ms = game.getMaximinStructure();
         OutcomeStructure<T> es = game.getOutcomeStructure();
@@ -39,8 +40,9 @@ public class PTESolver<T extends Comparable<T>> {
             result = GenericUtils.getMatrix(clazz, 0);
         }
         this.solution = result;
+        this.actions = es.getReachedActions();
         this.solved = true;
-        return solution;
+        return new Solution<T>(this.actions, this.solution);
     }
 
 
@@ -82,6 +84,10 @@ public class PTESolver<T extends Comparable<T>> {
         } else {
             throw new IllegalAccessException("Need to run solve() method first!");
         }
+    }
+    
+    public int[] getSolutionPath() {
+    	return actions;
     }
 
 }

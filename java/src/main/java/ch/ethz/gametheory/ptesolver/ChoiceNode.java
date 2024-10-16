@@ -73,5 +73,30 @@ class ChoiceNode<T extends Comparable<T>> implements Node<T> {
         }
         return isParetoOptimal;
     }
+    
+    public int getOnlyRemainingAction() {
+        if (nOutcomes == 0) {
+        	return -1;
+        }
+        int remainingAction = -1;
+        int index = 0;
+        for (Edge<T> e : actions) {
+        	++index;
+            int n = e.getNumberOfOutcomes();
+            if (n == 0)
+            {
+        		// No remaining outcomes here.
+            	continue;
+            }
+        	if(remainingAction != -1)
+        	{
+        		// More than one action with remaining outcomes.
+        		return -1;
+        	}
+        	// First action found with remaining outcomes.
+        	remainingAction = index;
+        }
+        return remainingAction;
+    }
 
 }

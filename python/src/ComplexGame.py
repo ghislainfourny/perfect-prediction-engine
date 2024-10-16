@@ -12,9 +12,26 @@ class ComplexGame(Game):
 
 
     def generate_quantum_payoff(self, number_range):
+        p1 = random.sample([1,2], 1)[0]
+        p2 = random.sample([1,2], 1)[0]
+        pp11 = [2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1]
+        pp12 = [1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2]
+        pp21 = [2,2,2,2,1,1,1,1,2,2,2,2,1,1,1,1]
+        pp22 = [1,1,1,1,2,2,2,2,1,1,1,1,2,2,2,2]
+
         player1_samples = random.sample(number_range, self.leaves)
         player2_samples = random.sample(number_range, self.leaves)
-
+        
+        if p1 == 1:
+            player1_samples = pp11
+        else:
+            player1_samples = pp12
+        
+        if p2 == 1:
+            player2_samples = pp21
+        else:
+            player2_samples = pp22
+        
         theta_generator = random.uniform(0, 1.0)
         phi = math.radians(random.uniform(0, 360.0))
         theta = math.acos(2*theta_generator - 1)
@@ -22,16 +39,46 @@ class ComplexGame(Game):
         cos_theta = math.cos(theta)
         sin_theta = math.sin(theta)
         cos_phi = math.cos(phi)
+        
+        constant = 1.044
 
         cpst = cos_phi*sin_theta
 
         payoff = (
             tuple(player1_samples),
             tuple(player2_samples),
-            (-cos_theta-1, -cos_theta+1, cos_theta+1, cos_theta-1, -cos_theta, -cos_theta,
-                cos_theta, cos_theta, cpst, cpst, -cpst, -cpst, cpst-1, cpst+1, -cpst+1, -cpst-1),
-            (cos_theta-1, -cos_theta+1, cos_theta+1, -cos_theta-1, -cpst, cpst, -cpst, cpst,
-                cos_theta, -cos_theta, cos_theta, -cos_theta, -cpst-1, cpst+1, -cpst+1, cpst-1)
+            (-sin_theta*cos_phi + constant/math.sqrt(2),
+                -sin_theta*cos_phi - constant/math.sqrt(2),
+                sin_theta*cos_phi - constant/math.sqrt(2),
+                sin_theta*cos_phi + constant/math.sqrt(2),
+                -sin_theta*cos_phi - constant/math.sqrt(2),
+                -sin_theta*cos_phi + constant/math.sqrt(2),
+                sin_theta*cos_phi + constant/math.sqrt(2),
+                sin_theta*cos_phi - constant/math.sqrt(2),
+                -cos_theta + constant/math.sqrt(2),
+                -cos_theta - constant/math.sqrt(2),
+                cos_theta - constant/math.sqrt(2),
+                cos_theta + constant/math.sqrt(2),
+                -cos_theta + constant/math.sqrt(2),
+                -cos_theta - constant/math.sqrt(2),
+                cos_theta - constant/math.sqrt(2),
+                cos_theta + constant/math.sqrt(2)),
+            ((sin_theta*cos_phi+cos_theta+constant)/math.sqrt(2),
+                (-sin_theta*cos_phi-cos_theta-constant)/math.sqrt(2),
+                (sin_theta*cos_phi+cos_theta-constant)/math.sqrt(2),
+                (-sin_theta*cos_phi-cos_theta+constant)/math.sqrt(2),
+                (-sin_theta*cos_phi+cos_theta-constant)/math.sqrt(2),
+                (sin_theta*cos_phi-cos_theta+constant)/math.sqrt(2),
+                (-sin_theta*cos_phi+cos_theta+constant)/math.sqrt(2),
+                (sin_theta*cos_phi-cos_theta-constant)/math.sqrt(2),
+                (sin_theta*cos_phi+cos_theta+constant)/math.sqrt(2),
+                (-sin_theta*cos_phi-cos_theta-constant)/math.sqrt(2),
+                (sin_theta*cos_phi+cos_theta-constant)/math.sqrt(2),
+                (-sin_theta*cos_phi-cos_theta+constant)/math.sqrt(2),
+                (-sin_theta*cos_phi+cos_theta+constant)/math.sqrt(2),
+                (sin_theta*cos_phi-cos_theta-constant)/math.sqrt(2),
+                (-sin_theta*cos_phi+cos_theta-constant)/math.sqrt(2),
+                (sin_theta*cos_phi-cos_theta+constant)/math.sqrt(2))
         )
 
         return payoff

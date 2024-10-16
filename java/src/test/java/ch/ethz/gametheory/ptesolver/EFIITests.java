@@ -133,7 +133,7 @@ public class EFIITests {
             factory.parseData(choiceNodeToInformationSetMap, informationSetToPlayerMap, partialActions, outcomes);
             GameWithImperfectInformation<Integer> game = factory.createGame();
             PTESolver<Integer> solver = new PTESolver<>(game, Integer.class);
-            Integer[][] result = solver.solve();
+            Integer[][] result = solver.solve().getOutcome();
             assertArrayEquals(expectedResult, result);
         } catch (IllegalAccessException e) {
             e.printStackTrace();

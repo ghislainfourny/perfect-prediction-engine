@@ -207,23 +207,24 @@ public class JsonSolver {
         conf.setAppName("GameSolver");
         conf.setMaster("local[*]");
         
-        String inputBasePath = getPathToProcess();
-        File[] dirsToProcess = getDirsToProcess(inputBasePath);
+        //String inputBasePath = getPathToProcess();
+        //File[] dirsToProcess = getDirsToProcess(inputBasePath);
 
         LocalDateTime currentDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String dateTimeString = currentDateTime.format(formatter);
-        String resultBasePath = System.getenv("OUTPUT_LABELED");
+        String inputPath = System.getenv("OUTPUT_GENERATED");
+        String resultPath = System.getenv("OUTPUT_LABELED");
 
         try (JavaSparkContext sc = new JavaSparkContext(conf)) {
    
             long startTime = System.currentTimeMillis();
-            int total = dirsToProcess.length;
-            int current = 0;
+            //int total = dirsToProcess.length;
+            //int current = 0;
             
-            for(File dir : dirsToProcess) {
-                String inputPath = inputBasePath + "/" + dir.getName();
-                String resultPath = resultBasePath + "/" + dir.getName();
+            //for(File dir : dirsToProcess) {
+                //String inputPath = inputBasePath + "/" + dir.getName();
+                //String resultPath = resultBasePath + "/" + dir.getName();
             
                 // actual porcessing
                 JavaRDD<String> linesRDD = sc.textFile(inputPath);
@@ -231,12 +232,12 @@ public class JsonSolver {
                 processedRDD.saveAsTextFile(resultPath);
 
                 // estimate remaining time
-                current++;
-                long currentTime = System.currentTimeMillis();
-                long ellapsedTime = currentTime - startTime;
-                long estimatedTimeLeft = ((ellapsedTime / current) * (total - current)) / 3600;
-                System.out.println("Estimated time left: " + estimatedTimeLeft);
-            }
+                //current++;
+                //long currentTime = System.currentTimeMillis();
+                //long ellapsedTime = currentTime - startTime;
+                //long estimatedTimeLeft = ((ellapsedTime / current) * (total - current)) / 3600;
+                //System.out.println("Estimated time left: " + estimatedTimeLeft);
+            //}
             
             sc.stop();
         }

@@ -40,45 +40,53 @@ class ComplexGame(Game):
         sin_theta = math.sin(theta)
         cos_phi = math.cos(phi)
         
-        constant = 1.044
+        constant = 1
 
         cpst = cos_phi*sin_theta
 
         payoff = (
             tuple(player1_samples),
             tuple(player2_samples),
-            (-sin_theta*cos_phi + constant/math.sqrt(2),
-                -sin_theta*cos_phi - constant/math.sqrt(2),
-                sin_theta*cos_phi - constant/math.sqrt(2),
-                sin_theta*cos_phi + constant/math.sqrt(2),
-                -sin_theta*cos_phi - constant/math.sqrt(2),
-                -sin_theta*cos_phi + constant/math.sqrt(2),
-                sin_theta*cos_phi + constant/math.sqrt(2),
-                sin_theta*cos_phi - constant/math.sqrt(2),
+            (   -cos_theta - constant/math.sqrt(2),
+                -cos_theta + constant/math.sqrt(2),
+                cos_theta  + constant/math.sqrt(2),
+                cos_theta  - constant/math.sqrt(2),
+
                 -cos_theta + constant/math.sqrt(2),
                 -cos_theta - constant/math.sqrt(2),
-                cos_theta - constant/math.sqrt(2),
-                cos_theta + constant/math.sqrt(2),
-                -cos_theta + constant/math.sqrt(2),
-                -cos_theta - constant/math.sqrt(2),
-                cos_theta - constant/math.sqrt(2),
-                cos_theta + constant/math.sqrt(2)),
-            ((sin_theta*cos_phi+cos_theta+constant)/math.sqrt(2),
-                (-sin_theta*cos_phi-cos_theta-constant)/math.sqrt(2),
-                (sin_theta*cos_phi+cos_theta-constant)/math.sqrt(2),
-                (-sin_theta*cos_phi-cos_theta+constant)/math.sqrt(2),
-                (-sin_theta*cos_phi+cos_theta-constant)/math.sqrt(2),
-                (sin_theta*cos_phi-cos_theta+constant)/math.sqrt(2),
-                (-sin_theta*cos_phi+cos_theta+constant)/math.sqrt(2),
-                (sin_theta*cos_phi-cos_theta-constant)/math.sqrt(2),
-                (sin_theta*cos_phi+cos_theta+constant)/math.sqrt(2),
-                (-sin_theta*cos_phi-cos_theta-constant)/math.sqrt(2),
-                (sin_theta*cos_phi+cos_theta-constant)/math.sqrt(2),
-                (-sin_theta*cos_phi-cos_theta+constant)/math.sqrt(2),
-                (-sin_theta*cos_phi+cos_theta+constant)/math.sqrt(2),
-                (sin_theta*cos_phi-cos_theta-constant)/math.sqrt(2),
-                (-sin_theta*cos_phi+cos_theta-constant)/math.sqrt(2),
-                (sin_theta*cos_phi-cos_theta+constant)/math.sqrt(2))
+                cos_theta  - constant/math.sqrt(2),
+                cos_theta  + constant/math.sqrt(2),
+
+                -cpst      - constant/math.sqrt(2),
+                -cpst      + constant/math.sqrt(2),
+                cpst       + constant/math.sqrt(2),
+                cpst       - constant/math.sqrt(2),
+
+                -cpst      - constant/math.sqrt(2),
+                -cpst      + constant/math.sqrt(2),
+                cpst      + constant/math.sqrt(2),
+                cpst      - constant/math.sqrt(2)
+                ),
+            (   (-cpst - cos_theta - constant)/math.sqrt(2),
+                (cpst  + cos_theta + constant)/math.sqrt(2),
+                (-cpst - cos_theta + constant)/math.sqrt(2),
+                (cpst  + cos_theta - constant)/math.sqrt(2),
+
+                (-cpst + cos_theta + constant)/math.sqrt(2),
+                (cpst  - cos_theta - constant)/math.sqrt(2),
+                (-cpst + cos_theta - constant)/math.sqrt(2),
+                (cpst  - cos_theta + constant)/math.sqrt(2),
+
+                (-cpst - cos_theta - constant)/math.sqrt(2),
+                (cpst  + cos_theta + constant)/math.sqrt(2),
+                (-cpst - cos_theta + constant)/math.sqrt(2),
+                (cpst  + cos_theta - constant)/math.sqrt(2),
+
+                (-cpst + cos_theta - constant)/math.sqrt(2),
+                (cpst  - cos_theta + constant)/math.sqrt(2),
+                (-cpst + cos_theta + constant)/math.sqrt(2),
+                (cpst  - cos_theta - constant)/math.sqrt(2),
+                )
         )
 
         return payoff

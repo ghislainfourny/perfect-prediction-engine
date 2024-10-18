@@ -1,4 +1,4 @@
-declare variable $path as anyURI external := anyURI("/tmp/labeled");
+declare variable $path as anyURI external := anyURI("/tmp/labeled/games");
 
 declare	type local:histogram as { "path" : "string", "outcome" : "integer", "count" : "integer" };
 
